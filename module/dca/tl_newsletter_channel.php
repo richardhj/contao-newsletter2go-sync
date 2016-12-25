@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_newsletter_channel']['fields']['n2g_group_id'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_newsletter_channel']['n2g_group_id'],
     'exclude' => true,
     'inputType' => 'select',
-    'options_callback' => ['CleverreachSync\Helper\Hooks', 'getNewsletter2GoGroups'],
+    'options_callback' => ['Newsletter2Go\ContaoSync\Helper\Dca', 'getNewsletter2GoGroups'],
     'eval' => [
 	    'unique'=>true
         ],
