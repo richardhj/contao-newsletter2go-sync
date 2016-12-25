@@ -16,7 +16,11 @@ $ composer require richardhj/contao-newsletter2go-sync
 
 ## Usage
 
-TODO
+* Go to the back end section "Newsletter2Go Users" and create a user. After saving, click on "authenticate"
+* Edit your user you are accessing the back end with. Choose the "Newsletter2Go User" and click on save
+* Edit a member group or newsletter channel and activate syncing
+
+Syncing will work for back end users that have a "Newsletter2Go user" assigned exclusively.
 
 ## License
 
