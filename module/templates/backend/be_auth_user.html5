@@ -1,0 +1,15 @@
+
+<form<?php if ($this->action): ?> action="<?= $this->action ?>"<?php endif; ?> id="<?= $this->formId ?>" method="<?= $this->method ?>" enctype="<?= $this->enctype ?>"<?= $this->attributes ?><?= $this->novalidate ?>>
+    <div class="formbody">
+            <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
+            <input type="hidden" name="REQUEST_TOKEN" value="<?= RequestToken::get() ?>">
+        <?= $this->hidden ?>
+        <?php if (!$this->tableless): ?>
+            <table>
+                <?= $this->fields ?>
+            </table>
+        <?php else: ?>
+            <?= $this->fields ?>
+        <?php endif; ?>
+    </div>
+</form>
