@@ -109,7 +109,7 @@ class Dca extends Helper
 
 
     /**
-     * Sync local member with group associated cleverreach groups
+     * Sync local member with group associated Newsletter2Go groups
      * @category save_callback (field: groups)
      *
      * @param mixed          $value The submitted groups as serialized string
@@ -127,7 +127,7 @@ class Dca extends Helper
                     'SELECT n2g_group_id FROM tl_member_group WHERE id IN('.implode(',', $groups).') AND n2g_sync=1'
                 )
                 ->fetchEach('n2g_group_id')
-            : array();
+            : [];
 
         $groupsOld = \Database::getInstance()
             ->prepare(
@@ -139,7 +139,7 @@ class Dca extends Helper
         /** @type \Model $member */
         $member = \MemberModel::findByPk($dc->id);
 
-        # $objMember        contains obsolete data (pre save)
+        # $member           contains obsolete data (pre save)
         # $dc->activeRecord contains current data
 
         $recipient = new NewsletterRecipient();
@@ -176,9 +176,7 @@ class Dca extends Helper
         $recipient->save();
 
         // Create receiver in these groups
-//        foreach (array_diff($groupsNew, $groupsOld) as $group) {
         foreach ($groupsNew as $group) {
-
             $recipient->addToGroup($group);
         }
 
