@@ -1,11 +1,11 @@
 <?php
 /**
- * FERIENPASS extension for Contao Open Source CMS built on the MetaModels extension
+ * Newsletter2Go Synchronization for Contao Open Source CMS
  *
- * Copyright (c) 2015-2016 Richard Henkenjohann
+ * Copyright (c) 2015-2017 Richard Henkenjohann
  *
- * @package Ferienpass
- * @author  Richard Henkenjohann <richard@ferienpass.online>
+ * @package Newsletter2GoSync
+ * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  */
 
 
