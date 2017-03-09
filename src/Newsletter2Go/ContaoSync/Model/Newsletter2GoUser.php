@@ -16,6 +16,7 @@ use Contao\Model;
 
 /**
  * Class Newsletter2GoUser
+ *
  * @property string $name
  * @property string $authKey          Encrypted account auth key
  * @property string $authRefreshToken Encrypted user refresh token
@@ -30,6 +31,12 @@ class Newsletter2GoUser extends Model
     static $strTable = 'tl_newsletter2go_user';
 
 
+    /**
+     * Set a property. Encrypt the auth key beforehand
+     *
+     * @param string $key
+     * @param mixed  $value
+     */
     public function __set($key, $value)
     {
         switch ($key) {
@@ -44,6 +51,13 @@ class Newsletter2GoUser extends Model
     }
 
 
+    /**
+     * Encrypt a property. Decrypt the auth key beforhand
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
     public function __get($key)
     {
         switch ($key) {

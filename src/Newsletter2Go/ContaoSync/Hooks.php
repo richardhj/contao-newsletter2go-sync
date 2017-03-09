@@ -8,15 +8,14 @@
  * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  */
 
-namespace Newsletter2Go\ContaoSync\Helper;
+namespace Newsletter2Go\ContaoSync;
 
 
 use GuzzleHttp\Exception\ClientException;
 use Newsletter2Go\Api\Model\NewsletterRecipient;
-use Newsletter2Go\ContaoSync\Helper;
 
 
-class Hooks extends Helper
+class Hooks extends AbstractHelper
 {
 
     /**
@@ -43,7 +42,7 @@ class Hooks extends Helper
                     $receiver->addToGroup($channel->n2g_group_id);
                 } catch (ClientException $e) {
                     \System::log(
-                        sprintf('Could not activate/insert recipient %s to CR group %u. %s', $email, $channel->n2g_group_id, $e->getMessage()),
+                        sprintf('Could not activate/insert recipient %s to N2G group %u. %s', $email, $channel->n2g_group_id, $e->getMessage()),
                         __METHOD__,
                         TL_ERROR
                     );

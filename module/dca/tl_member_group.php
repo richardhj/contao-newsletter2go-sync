@@ -13,18 +13,17 @@
  * Config
  */
 //@todo $GLOBALS['TL_DCA']['tl_member_group']['config']['onload_callback'][] = array('CleverreachSync\Helper\Hooks', 'syncNewsletterChannelsWithGroups');
-$GLOBALS['TL_DCA']['tl_member_group']['config']['onsubmit_callback'][] = ['Newsletter2Go\ContaoSync\Helper\Dca', 'createN2GGroupForMemberGroup'];
-$GLOBALS['TL_DCA']['tl_member_group']['config']['ondelete_callback'][] = [
-    'Newsletter2Go\ContaoSync\Helper\Dca',
-    'deleteMemberGroup',
-];
+$GLOBALS['TL_DCA']['tl_member_group']['config']['onsubmit_callback'][] =
+    ['Newsletter2Go\ContaoSync\Dca\MemberGroup', 'createNewsletter2GoGroup'];
+$GLOBALS['TL_DCA']['tl_member_group']['config']['ondelete_callback'][] =
+    ['Newsletter2Go\ContaoSync\Dca\MemberGroup', 'deleteMemberGroup'];
 
 
 /**
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_member_group']['palettes']['__selector__'][] = 'n2g_sync';
-$GLOBALS['TL_DCA']['tl_member_group']['palettes']['default'] .= ';{newsletter2go_legend},n2g_sync';
+$GLOBALS['TL_DCA']['tl_member_group']['palettes']['default']        .= ';{newsletter2go_legend},n2g_sync';
 
 
 /**
@@ -51,12 +50,12 @@ $GLOBALS['TL_DCA']['tl_member_group']['fields']['n2g_group_id'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_member_group']['n2g_group_id'],
     'exclude'          => true,
     'inputType'        => 'select',
-    'options_callback' => ['Newsletter2Go\ContaoSync\Helper\Dca', 'getNewsletter2GoGroups'],
+    'options_callback' => ['Newsletter2Go\ContaoSync\Dca\MemberGroup', 'getNewsletter2GoGroups'],
     'eval'             => [
-        'unique'   => true,
+        'unique'             => true,
         'includeBlankOption' => true,
-        'blankOptionLabel' => '(neu erstellen)', //@todo lang
-        'tl_class' => 'w50',
+        'blankOptionLabel'   => '(neu erstellen)', //@todo lang
+        'tl_class'           => 'w50',
     ],
     'sql'              => "varchar(8) NOT NULL default ''",
 ];

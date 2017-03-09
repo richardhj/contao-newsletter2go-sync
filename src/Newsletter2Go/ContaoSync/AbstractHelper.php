@@ -11,14 +11,38 @@
 namespace Newsletter2Go\ContaoSync;
 
 
+use Newsletter2Go\Api\Model\NewsletterGroup;
 use Newsletter2Go\Api\Model\NewsletterList;
 use Newsletter2Go\Api\Tool\ApiCredentials;
 use Newsletter2Go\Api\Tool\ApiCredentialsFactory;
 use Newsletter2Go\ContaoSync\Model\Newsletter2GoUser;
 
 
-class Helper
+abstract class AbstractHelper
 {
+
+    /**
+     * Get all Newsletter2Go groups
+     *
+     * @category options_callback
+     *
+     * @return array
+     */
+    public function getNewsletter2GoGroups()
+    {
+        $return = [];
+        $groups = NewsletterGroup::findByList(self::getListId(), null, self::getApiCredentials());
+
+        if (null !== $groups) {
+            /** @var NewsletterGroup $group */
+            foreach ($groups as $group) {
+                $return[$group->getId()] = $group->getName();
+            }
+        }
+
+        return $return;
+    }
+
 
     /**
      * Get the id of the first Newsletter2Go list which might be the default list

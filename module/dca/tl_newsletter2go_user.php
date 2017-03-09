@@ -18,7 +18,7 @@ $table = Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable();
 $GLOBALS['TL_DCA'][$table] = [
 
     // Config
-    'config' => [
+    'config'   => [
         'dataContainer' => 'Table',
         'sql'           =>
             [
@@ -29,7 +29,7 @@ $GLOBALS['TL_DCA'][$table] = [
     ],
 
     // List
-    'list'   => [
+    'list'     => [
         'sorting'           => [
             'mode'        => 1,
             'fields'      => ['name'],
@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA'][$table] = [
         ],
         'label'             => [
             'fields' => ['name'],
-//            'group_callback'          => array('NotificationCenter\tl_epost_user', 'getGroupLabel')
+            //            'group_callback'          => array('NotificationCenter\tl_epost_user', 'getGroupLabel')
         ],
         'global_operations' => [
             'all' => [
@@ -49,27 +49,28 @@ $GLOBALS['TL_DCA'][$table] = [
             ],
         ],
         'operations'        => [
-            'edit'   => [
+            'edit'         => [
                 'label' => &$GLOBALS['TL_LANG'][$table]['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif',
             ],
-            'delete' => [
+            'delete'       => [
                 'label'      => &$GLOBALS['TL_LANG'][$table]['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
+                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                                . '\'))return false;Backend.getScrollOffset()"',
             ],
-            'show'   => [
+            'show'         => [
                 'label' => &$GLOBALS['TL_LANG'][$table]['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif',
             ],
             'authenticate' => array
             (
-                'label'               => &$GLOBALS['TL_LANG'][$table]['authenticate'],
-                'href'                => 'key=authenticate',
-                'icon'                => 'assets/newsletter2go-sync/images/be-user-auth.png'
+                'label' => &$GLOBALS['TL_LANG'][$table]['authenticate'],
+                'href'  => 'key=authenticate',
+                'icon'  => 'assets/newsletter2go-sync/images/be-user-auth.png'
             )
         ],
     ],
@@ -80,78 +81,48 @@ $GLOBALS['TL_DCA'][$table] = [
     ],
 
     // Fields
-    'fields'                => [
-    'id'               => [
-        'sql' => "int(10) unsigned NOT NULL auto_increment",
-    ],
-    'tstamp'           => [
-        'sql' => "int(10) unsigned NOT NULL default '0'",
-    ],
-    'name'             => [
-        'label'     => &$GLOBALS['TL_LANG'][$table]['name'],
-        'exclude'   => true,
-        'search'    => true,
-        'inputType' => 'text',
-        'eval'      => [
-            'mandatory' => true,
-            'maxlength' => 255,
-            'tl_class'  => 'w50',
+    'fields'   => [
+        'id'               => [
+            'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
-        'sql'       => "varchar(255) NOT NULL default ''",
-    ],
-    'authKey'          => [
-        'label'     => &$GLOBALS['TL_LANG'][$table]['authKey'],
-        'exclude'   => true,
-        'inputType' => 'text',
-        'eval'      => [
-            'mandatory' => true,
-            'encrypt'   => true,
-//            'hideInput' => true,
+        'tstamp'           => [
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+        ],
+        'name'             => [
+            'label'     => &$GLOBALS['TL_LANG'][$table]['name'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'mandatory' => true,
+                'maxlength' => 255,
+                'tl_class'  => 'w50',
+            ],
+            'sql'       => "varchar(255) NOT NULL default ''",
+        ],
+        'authKey'          => [
+            'label'     => &$GLOBALS['TL_LANG'][$table]['authKey'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'mandatory'    => true,
+                'encrypt'      => true,
+                //            'hideInput' => true,
                 'preserveTags' => true,
-            'tl_class'  => 'w50',
+                'tl_class'     => 'w50',
+            ],
+            'sql'       => "text NULL",
         ],
-//            'load_callback' => function ($value) {
-//                if (strlen($value)) {
-//                    return \Encryption::encrypt('*****');
-//                }
-//
-//                return $value;
-//            },
-//            'save_callback' => function ($value, \DataContainer $dc) {
-//                if ('*****' === \Encryption::decrypt($value)) {
-//                    return $dc->activeRecord->authKey;
-//                }
-//
-//                return $value;
-//            },
-        'sql'       => "text NULL",
-    ],
-    'authRefreshToken' => [
-        'label'     => &$GLOBALS['TL_LANG'][$table]['authRefreshToken'],
-        'exclude'   => true,
-        'inputType' => 'text',
-        'eval'      => [
-            'mandatory' => true,
-            'encrypt'   => true,
-            'hideInput' => true,
-//                'preserveTags' => true,
-//                'tl_class'     => 'w50',
+        'authRefreshToken' => [
+            'label'     => &$GLOBALS['TL_LANG'][$table]['authRefreshToken'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'mandatory' => true,
+                'encrypt'   => true,
+                'hideInput' => true,
+            ],
+            'sql'       => "text NULL",
         ],
-//            'load_callback' => function ($value) {
-//                if (strlen($value)) {
-//                    return \Encryption::encrypt('*****');
-//                }
-//
-//                return $value;
-//            },
-//            'save_callback' => function ($value, \DataContainer $dc) {
-//                if ('*****' === \Encryption::decrypt($value)) {
-//                    return $dc->activeRecord->password;
-//                }
-//
-//                return $value;
-//            },
-        'sql'       => "text NULL",
     ],
-],
 ];

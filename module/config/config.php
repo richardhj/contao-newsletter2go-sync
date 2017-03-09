@@ -19,7 +19,7 @@ array_insert(
         'newsletter2go_users' => [
             'tables'       => [Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable()],
             'icon'         => 'system/modules/newsletter/assets/icon.gif',
-            'authenticate' => ['Newsletter2Go\ContaoSync\Helper\Dca', 'authenticateUser'],
+            'authenticate' => ['Newsletter2Go\ContaoSync\Dca\Newsletter2GoUser', 'authenticateUser'],
         ],
     ]
 );
@@ -28,12 +28,12 @@ array_insert(
 /**
  * Models
  */
-$GLOBALS['TL_MODELS'][Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable(
-)] = 'Newsletter2Go\ContaoSync\Model\Newsletter2GoUser';
+$GLOBALS['TL_MODELS'][Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable()] =
+    'Newsletter2Go\ContaoSync\Model\Newsletter2GoUser';
 
 
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['activateRecipient'][] = ['Newsletter2Go\ContaoSync\Helper\Hooks', 'activateRecipient'];
-$GLOBALS['TL_HOOKS']['removeRecipient'][] = ['Newsletter2Go\ContaoSync\Helper\Hooks', 'removeRecipient'];
+$GLOBALS['TL_HOOKS']['activateRecipient'][] = ['Newsletter2Go\ContaoSync\Hooks', 'activateRecipient'];
+$GLOBALS['TL_HOOKS']['removeRecipient'][]   = ['Newsletter2Go\ContaoSync\Hooks', 'removeRecipient'];
