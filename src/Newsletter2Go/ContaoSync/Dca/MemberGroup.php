@@ -70,6 +70,7 @@ class MemberGroup extends AbstractHelper
             $recipient->setApiCredentials(self::getApiCredentials());
             $recipient->setListId(self::getListId());
             $recipient->setEmail($member);
+            // Saving a recipient will fetch the id
             $recipient->save();
 
             $recipient->removeFromGroup($dc->activeRecord->n2g_group_id);

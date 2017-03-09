@@ -114,6 +114,7 @@ class Member extends AbstractHelper
             }
         }
 
+        // Saving a recipient will update the data and fetch the id
         $recipient->save();
 
         // Create receiver in these groups
