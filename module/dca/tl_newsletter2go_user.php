@@ -46,11 +46,6 @@ $GLOBALS['TL_DCA'][$table] = [
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif',
             ],
-            'copy'   => [
-                'label' => &$GLOBALS['TL_LANG'][$table]['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.gif',
-            ],
             'delete' => [
                 'label'      => &$GLOBALS['TL_LANG'][$table]['delete'],
                 'href'       => 'act=delete',
@@ -66,7 +61,7 @@ $GLOBALS['TL_DCA'][$table] = [
             (
                 'label'               => &$GLOBALS['TL_LANG'][$table]['authenticate'],
                 'href'                => 'key=authenticate',
-                'icon'                => 'show.gif'
+                'icon'                => 'assets/newsletter2go-sync/images/be-user-auth.png'
             )
         ],
     ],

@@ -34,7 +34,8 @@
     "extra": {
         "contao": {
             "sources": {
-                "module": "system/modules/newsletter2go-sync"
+                "module": "system/modules/newsletter2go-sync",
+                "assets": "assets/newsletter2go-sync"
             }
         }
     }
