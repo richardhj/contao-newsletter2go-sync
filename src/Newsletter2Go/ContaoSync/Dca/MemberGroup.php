@@ -38,7 +38,7 @@ class MemberGroup extends AbstractHelper
         /** @var \MemberGroupModel|\Model $memberGroup */
         $memberGroup = \MemberGroupModel::findByPk($dc->id);
 
-        if ($memberGroup->n2g_sync || !$memberGroup->n2g_group_id) {
+        if ($memberGroup->n2g_sync && !$memberGroup->n2g_group_id) {
             $group = new NewsletterGroup();
             $group->setApiCredentials($apiCredentials);
             $group->setListId(self::getListId());
