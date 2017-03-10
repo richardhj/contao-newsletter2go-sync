@@ -17,7 +17,7 @@ $table = \UserModel::getTable();
  */
 $GLOBALS['TL_DCA'][$table]['palettes']['__selector__'][] = 'n2g_active';
 foreach ($GLOBALS['TL_DCA'][$table]['palettes'] as $name => $palette) {
-    if ('__selector__' === $name) {
+    if (in_array($name, ['__selector__', 'login'])) {
         continue;
     }
 
