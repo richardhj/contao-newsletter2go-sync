@@ -87,6 +87,11 @@ class Member extends AbstractHelper
             ->execute($dc->id)
             ->fetchEach('n2g_group_id');
 
+        // Nothing to sync here
+        if (0 === count($groupsNew) && 0 === count($groupsOld)) {
+            return $value;
+        }
+
         /** @type \Model $member */
         $member = \MemberModel::findByPk($dc->id);
 
