@@ -102,6 +102,7 @@ class Member extends AbstractHelper
         $recipient->setApiCredentials($apiCredentials);
         $recipient->setListId(self::getListId());
 
+        // Todo refactor to event
         foreach ($member->row() as $k => $v) {
             switch ($k) {
                 case 'email':
@@ -124,6 +125,7 @@ class Member extends AbstractHelper
                     $recipient->setLastName($v);
                     break;
 
+                // todo add birthday
                 default:
                     break;
             }
