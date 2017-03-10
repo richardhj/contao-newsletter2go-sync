@@ -29,8 +29,13 @@ class Member extends AbstractHelper
             return;
         }
 
+        // Check if user has N2G sync enabled
+        if (null === ($apiCredentials = self::getApiCredentials())) {
+            return;
+        }
+
         $recipient = new NewsletterRecipient();
-        $recipient->setApiCredentials(self::getApiCredentials());
+        $recipient->setApiCredentials($apiCredentials);
         $recipient->setListId(self::getListId());
         $recipient->setEmail($dc->activeRecord->email);
 
@@ -62,6 +67,11 @@ class Member extends AbstractHelper
     {
         $groups = deserialize($value);
 
+        // Check if user has N2G sync enabled
+        if (null === ($apiCredentials = self::getApiCredentials())) {
+            return $value;
+        }
+
         $groupsNew = $groups ?
             \Database::getInstance()
                 ->query(
@@ -84,7 +94,7 @@ class Member extends AbstractHelper
         # $dc->activeRecord contains current data
 
         $recipient = new NewsletterRecipient();
-        $recipient->setApiCredentials(self::getApiCredentials());
+        $recipient->setApiCredentials($apiCredentials);
         $recipient->setListId(self::getListId());
 
         foreach ($member->row() as $k => $v) {

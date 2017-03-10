@@ -30,12 +30,17 @@ class MemberGroup extends AbstractHelper
             return;
         }
 
+        // Check if user has N2G sync enabled
+        if (null === ($apiCredentials = self::getApiCredentials())) {
+            return;
+        }
+
         /** @var \MemberGroupModel|\Model $memberGroup */
         $memberGroup = \MemberGroupModel::findByPk($dc->id);
 
         if ($memberGroup->n2g_sync || !$memberGroup->n2g_group_id) {
             $group = new NewsletterGroup();
-            $group->setApiCredentials(self::getApiCredentials());
+            $group->setApiCredentials($apiCredentials);
             $group->setListId(self::getListId());
             $group->setName($memberGroup->name);
             $group->save();
@@ -58,6 +63,11 @@ class MemberGroup extends AbstractHelper
             return;
         }
 
+        // Check if user has N2G sync enabled
+        if (null === ($apiCredentials = self::getApiCredentials())) {
+            return;
+        }
+
         $members = \Database::getInstance()
             ->prepare(
                 'SELECT m.email FROM tl_member AS m INNER JOIN tl_member_to_group mg ON m.id=mg.member_id WHERE mg.group_id=?'
@@ -67,7 +77,7 @@ class MemberGroup extends AbstractHelper
 
         foreach ($members as $member) {
             $recipient = new NewsletterRecipient();
-            $recipient->setApiCredentials(self::getApiCredentials());
+            $recipient->setApiCredentials($apiCredentials);
             $recipient->setListId(self::getListId());
             $recipient->setEmail($member);
             // Saving a recipient will fetch the id
