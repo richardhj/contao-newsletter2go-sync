@@ -101,6 +101,7 @@ class Member extends AbstractHelper
         $recipient = new NewsletterRecipient();
         $recipient->setApiCredentials($apiCredentials);
         $recipient->setListId(self::getListId());
+        $recipient->setId($member->cr_receiver_id);
 
         // Todo refactor to event
         foreach ($member->row() as $k => $v) {

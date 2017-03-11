@@ -19,3 +19,7 @@ $GLOBALS['TL_DCA']['tl_member']['config']['ondelete_callback'][] = ['Newsletter2
  * Fields
  */
 $GLOBALS['TL_DCA']['tl_member']['fields']['groups']['save_callback'][] = ['Newsletter2Go\ContaoSync\Dca\Member', 'syncMemberGroupsWithNewsletter2Go'];
+
+$GLOBALS['TL_DCA']['tl_member']['fields']['n2g_receiver_id'] = [
+    'sql' => "varchar(8) NOT NULL default ''",
+];
