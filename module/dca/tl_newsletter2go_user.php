@@ -38,7 +38,6 @@ $GLOBALS['TL_DCA'][$table] = [
         ],
         'label'             => [
             'fields' => ['name'],
-            //            'group_callback'          => array('NotificationCenter\tl_epost_user', 'getGroupLabel')
         ],
         'global_operations' => [
             'all' => [
@@ -66,12 +65,11 @@ $GLOBALS['TL_DCA'][$table] = [
                 'href'  => 'act=show',
                 'icon'  => 'show.gif',
             ],
-            'authenticate' => array
-            (
+            'authenticate' => [
                 'label' => &$GLOBALS['TL_LANG'][$table]['authenticate'],
                 'href'  => 'key=authenticate',
                 'icon'  => 'assets/newsletter2go-sync/images/be-user-auth.png'
-            )
+            ]
         ],
     ],
 
@@ -107,7 +105,6 @@ $GLOBALS['TL_DCA'][$table] = [
             'eval'      => [
                 'mandatory'    => true,
                 'encrypt'      => true,
-                //            'hideInput' => true,
                 'preserveTags' => true,
                 'tl_class'     => 'w50',
             ],
