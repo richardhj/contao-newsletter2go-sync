@@ -33,11 +33,15 @@ class Newsletter2GoUser extends AbstractHelper
             return '';
         }
 
-        $return = '';
-
         $user         = UserModel::findByPk($dc->id);
         $authKey      = $user->authKey;
         $refreshToken = $user->authRefreshToken;
+
+        $userAuthTemplate             = new \FrontendTemplate('be_auth_user');
+        $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', \Environment::get('request')));
+        $userAuthTemplate->bacBtTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
+        $userAuthTemplate->backBt     = $GLOBALS['TL_LANG']['MSC']['backBT'];
+        $userAuthTemplate->headline   = 'Authentifizierung des API-Benutzers';
 
         $provider = new OAuthProvider(
             [
@@ -57,7 +61,10 @@ class Newsletter2GoUser extends AbstractHelper
 
                 $resourceOwner = $provider->getResourceOwner($accessToken)->toArray();
 
-                return 'You are logged in as: ' . $resourceOwner['first_name'] . ' ' . $resourceOwner['last_name'];
+                $userAuthTemplate->fields =
+                    '<p class="tl_confirm m12">You are logged in as: '
+                    . $resourceOwner['first_name'] . ' ' . $resourceOwner['last_name'] . '</p>';
+                return $userAuthTemplate->parse();
 
             } catch (IdentityProviderException $e) {
                 $user->authRefreshToken = null;
@@ -68,8 +75,6 @@ class Newsletter2GoUser extends AbstractHelper
 
             return '';
         }
-
-        define('BYPASS_TOKEN_CHECK', true);
 
         $form = new Form(
             'authenticate_n2g_user', 'POST', function ($haste) {
@@ -101,15 +106,6 @@ class Newsletter2GoUser extends AbstractHelper
             ]
         );
 
-        // Let's add  a submit button
-        $form->addFormField(
-            'submit',
-            [
-                'label'     => 'Authentifizieren',
-                'inputType' => 'submit',
-            ]
-        );
-
         // validate() also checks whether the form has been submitted
         if ($form->validate()) {
 
@@ -133,10 +129,11 @@ class Newsletter2GoUser extends AbstractHelper
 
         }
 
-        $userAuthTemplate = new \FrontendTemplate('be_auth_user');
         $form->addToTemplate($userAuthTemplate);
-        $return .= $userAuthTemplate->parse();
+        $userAuthTemplate->action = ampersand(\Environment::get('request'), true);
+        $userAuthTemplate->submit = specialchars('Authentifizieren');
+        $userAuthTemplate->tip    = 'Ihre Zugangsdaten (Benuztername/Passwort) werden nicht gespeichert';
 
-        return $return;
+        return $userAuthTemplate->parse();
     }
 }

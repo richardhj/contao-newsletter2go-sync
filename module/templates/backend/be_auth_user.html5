@@ -1,15 +1,29 @@
 
-<form<?php if ($this->action): ?> action="<?= $this->action ?>"<?php endif; ?> id="<?= $this->formId ?>" method="<?= $this->method ?>" enctype="<?= $this->enctype ?>"<?= $this->attributes ?><?= $this->novalidate ?>>
-    <div class="formbody">
-            <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
-            <input type="hidden" name="REQUEST_TOKEN" value="<?= RequestToken::get() ?>">
-        <?= $this->hidden ?>
-        <?php if (!$this->tableless): ?>
-            <table>
-                <?= $this->fields ?>
-            </table>
-        <?php else: ?>
-            <?= $this->fields ?>
-        <?php endif; ?>
-    </div>
+<div id="tl_buttons">
+<a href="<?= $this->backBtHref ?>" class="header_back" title="<?= $this->backBtTitle ?>" accesskey="b"><?= $this->backBt ?></a>
+</div>
+
+<form action="<?= $this->action ?>" id="<?= $this->formId ?>" class="tl_form" method="post" enctype="application/x-www-form-urlencoded">
+
+<div class="tl_formbody_edit">
+<input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
+<input type="hidden" name="REQUEST_TOKEN" value="<?= REQUEST_TOKEN ?>">
+
+<div class="tl_tbox">
+<h1><?= $this->headline ?></h1>
+<?= $this->fields ?>
+<?php if (strlen($this->tip)): ?>
+<p class="tl_help tl_tip"><?= $this->tip ?></p>
+<?php endif ?>
+</div>
+</div>
+
+<?php if (strlen($this->submit)): ?>
+<div class="tl_formbody_submit">
+<div class="tl_submit_container">
+<input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="<?= $this->submit ?>">
+</div>
+</div>
+<?php endif ?>
+
 </form>
