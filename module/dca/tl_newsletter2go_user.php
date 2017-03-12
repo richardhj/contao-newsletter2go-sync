@@ -20,24 +20,27 @@ $GLOBALS['TL_DCA'][$table] = [
     // Config
     'config'   => [
         'dataContainer' => 'Table',
-        'sql'           =>
-            [
-                'keys' => [
-                    'id' => 'primary',
-                ],
+        'sql'           => [
+            'keys' => [
+                'id' => 'primary',
             ],
+        ],
     ],
 
     // List
     'list'     => [
         'sorting'           => [
             'mode'        => 1,
-            'fields'      => ['name'],
+            'fields'      => [
+                'name'
+            ],
             'flag'        => 1,
             'panelLayout' => 'filter,search;limit',
         ],
         'label'             => [
-            'fields' => ['name'],
+            'fields' => [
+                'name'
+            ],
         ],
         'global_operations' => [
             'all' => [
