@@ -128,7 +128,13 @@ class Member extends AbstractHelper
                     $recipient->setLastName($v);
                     break;
 
-                // todo add birthday
+                case 'birthday':
+                    $dateOfBirth = date('c', $v);
+                    if ($dateOfBirth) {
+                        $recipient->setBirthday($dateOfBirth);
+                    }
+                    break;
+
                 default:
                     break;
             }
