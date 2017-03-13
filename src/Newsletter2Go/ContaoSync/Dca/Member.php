@@ -19,6 +19,7 @@ class Member extends AbstractHelper
 
     /**
      * Remove a member from all groups after deleting
+     *
      * @category ondelete_callback (table: tl_member)
      *
      * @param $dc
@@ -56,6 +57,7 @@ class Member extends AbstractHelper
 
     /**
      * Sync local member with group associated Newsletter2Go groups
+     *
      * @category save_callback (field: groups)
      *
      * @param mixed          $value The submitted groups as serialized string
@@ -75,7 +77,7 @@ class Member extends AbstractHelper
         $groupsNew = $groups ?
             \Database::getInstance()
                 ->query(
-                    'SELECT n2g_group_id FROM tl_member_group WHERE id IN('.implode(',', $groups).') AND n2g_sync=1'
+                    'SELECT n2g_group_id FROM tl_member_group WHERE id IN(' . implode(',', $groups) . ') AND n2g_sync=1'
                 )
                 ->fetchEach('n2g_group_id')
             : [];
@@ -101,7 +103,7 @@ class Member extends AbstractHelper
         $recipient = new NewsletterRecipient();
         $recipient->setApiCredentials($apiCredentials);
         $recipient->setListId(self::getListId());
-        $recipient->setId($member->cr_receiver_id);
+        $recipient->setId($member->n2g_receiver_id);
 
         // Todo refactor to event
         foreach ($member->row() as $k => $v) {
@@ -134,6 +136,12 @@ class Member extends AbstractHelper
 
         // Saving a recipient will update the data and fetch the id
         $recipient->save();
+
+        // Set the N2G receiver id if not done yet
+        if (!$member->n2g_receiver_id) {
+            $member->n2g_receiver_id = $recipient->getId();
+            $member->save();
+        }
 
         // Create receiver in these groups
         foreach ($groupsNew as $group) {

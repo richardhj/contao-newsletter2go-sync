@@ -54,6 +54,8 @@ abstract class AbstractHelper
         /** @var NewsletterList[] $lists */
         $lists = NewsletterList::findAll(null, self::getApiCredentials());
 
+        // TODO: add support for multiple lists (= address books in N2G). Should be done via the tl_n2g_user or tl_settings dca
+
         return $lists[0]->getId();
     }
 
