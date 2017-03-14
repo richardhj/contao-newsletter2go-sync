@@ -36,7 +36,7 @@ class Newsletter2GoUser extends AbstractHelper
         $user         = UserModel::findByPk($dc->id);
         $authKey      = $user->authKey;
         $refreshToken = $user->authRefreshToken;
-        $table        = \Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable();
+        $table        = UserModel::getTable();
 
         $userAuthTemplate             = new \FrontendTemplate('be_auth_user');
         $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', \Environment::get('request')));
