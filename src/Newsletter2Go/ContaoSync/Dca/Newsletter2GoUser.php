@@ -36,12 +36,13 @@ class Newsletter2GoUser extends AbstractHelper
         $user         = UserModel::findByPk($dc->id);
         $authKey      = $user->authKey;
         $refreshToken = $user->authRefreshToken;
+        $table        = \Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable();
 
         $userAuthTemplate             = new \FrontendTemplate('be_auth_user');
         $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', \Environment::get('request')));
         $userAuthTemplate->bacBtTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $userAuthTemplate->backBt     = $GLOBALS['TL_LANG']['MSC']['backBT'];
-        $userAuthTemplate->headline   = 'Authentifizierung des API-Benutzers';
+        $userAuthTemplate->headline   = $GLOBALS['TL_LANG'][$table]['be_user_auth']['headline'];
 
         $provider = new OAuthProvider(
             [
@@ -61,9 +62,10 @@ class Newsletter2GoUser extends AbstractHelper
 
                 $resourceOwner = $provider->getResourceOwner($accessToken)->toArray();
 
-                $userAuthTemplate->fields =
-                    '<p class="tl_confirm m12">You are logged in as: '
-                    . $resourceOwner['first_name'] . ' ' . $resourceOwner['last_name'] . '</p>';
+                $userAuthTemplate->fields = '<p class="tl_confirm m12">' . sprintf(
+                        $GLOBALS['TL_LANG'][$table]['be_user_auth']['authentication_confirmation'],
+                        $resourceOwner['first_name'] . ' ' . $resourceOwner['last_name']
+                    ) . '</p>';
                 return $userAuthTemplate->parse();
 
             } catch (IdentityProviderException $e) {
@@ -86,7 +88,7 @@ class Newsletter2GoUser extends AbstractHelper
         $form->addFormField(
             'username',
             [
-                'label'     => 'Benutzername',
+                'label'     => $GLOBALS['TL_LANG']['MSC']['username'],
                 'inputType' => 'text',
                 'eval'      => [
                     'mandatory' => true
@@ -97,7 +99,7 @@ class Newsletter2GoUser extends AbstractHelper
         $form->addFormField(
             'password',
             [
-                'label'     => ['Passwort'],
+                'label'     => $GLOBALS['TL_LANG']['MSC']['password'],
                 'inputType' => 'text',
                 'eval'      => [
                     'mandatory' => true,
@@ -124,15 +126,18 @@ class Newsletter2GoUser extends AbstractHelper
 
                 \Controller::reload();
             } catch (IdentityProviderException $e) {
-                $form->getWidget('password')->addError($e->getResponseBody()['error_description']);
+                $form
+                    ->getWidget('password')
+                    ->addError(
+                        $e->getResponseBody()['error_description']
+                    );
             }
-
         }
 
         $form->addToTemplate($userAuthTemplate);
         $userAuthTemplate->action = ampersand(\Environment::get('request'), true);
-        $userAuthTemplate->submit = specialchars('Authentifizieren');
-        $userAuthTemplate->tip    = 'Ihre Zugangsdaten (Benuztername/Passwort) werden nicht gespeichert';
+        $userAuthTemplate->submit = specialchars($GLOBALS['TL_LANG'][$table]['be_user_auth']['submit']);
+        $userAuthTemplate->tip    = $GLOBALS['TL_LANG'][$table]['be_user_auth']['tip'];
 
         return $userAuthTemplate->parse();
     }

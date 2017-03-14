@@ -40,3 +40,12 @@ $GLOBALS['TL_LANG'][$table]['show'][0]         = 'Details zeigen';
 $GLOBALS['TL_LANG'][$table]['show'][1]         = 'Details vom API-Benutzer ID %s anzeigen';
 $GLOBALS['TL_LANG'][$table]['authenticate'][0] = 'Authentifizieren';
 $GLOBALS['TL_LANG'][$table]['authenticate'][1] = 'Den API-Benutzer ID %s authentifizieren';
+
+
+/**
+ * Authentication back end
+ */
+$GLOBALS['TL_LANG'][$table]['be_user_auth']['headline']                    = 'Den API-Benutzer authentifizieren';
+$GLOBALS['TL_LANG'][$table]['be_user_auth']['authentication_confirmation'] = 'Sie sind angemeldet als: %s';
+$GLOBALS['TL_LANG'][$table]['be_user_auth']['submit']                      = 'Authentifizieren';
+$GLOBALS['TL_LANG'][$table]['be_user_auth']['tip']                         = 'Ihre Zugangsdaten (Benuztername/Passwort) werden nicht gespeichert';
