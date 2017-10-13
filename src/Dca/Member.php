@@ -1,19 +1,30 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Newsletter2Go\ContaoSync\Dca;
+namespace Richardhj\Newsletter2Go\Contao\Dca;
+
+use Contao\Database;
+use Contao\DataContainer;
+use Contao\MemberModel;
+use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
+use Richardhj\Newsletter2Go\Contao\AbstractHelper;
 
 
-use Newsletter2Go\Api\Model\NewsletterRecipient;
-use Newsletter2Go\ContaoSync\AbstractHelper;
-
+/**
+ * Class Member
+ *
+ * @package Richardhj\Newsletter2Go\Contao\Dca
+ */
 class Member extends AbstractHelper
 {
 
@@ -24,7 +35,7 @@ class Member extends AbstractHelper
      *
      * @param $dc
      */
-    public function deleteMember(\DataContainer $dc)
+    public function deleteMember(DataContainer $dc)
     {
         if (!$dc->id) {
             return;
@@ -43,7 +54,7 @@ class Member extends AbstractHelper
         // Fetch id
         $recipient->save();
 
-        $groups = \Database::getInstance()
+        $groups = Database::getInstance()
             ->prepare(
                 'SELECT mg.n2g_group_id FROM tl_member_group AS mg INNER JOIN tl_member_to_group mtg ON mg.id=mtg.group_id WHERE mtg.member_id=? AND mg.n2g_sync=1'
             )
@@ -60,8 +71,8 @@ class Member extends AbstractHelper
      *
      * @category save_callback (field: groups)
      *
-     * @param mixed          $value The submitted groups as serialized string
-     * @param \DataContainer $dc
+     * @param mixed         $value The submitted groups as serialized string
+     * @param DataContainer $dc
      *
      * @return mixed
      */
@@ -75,14 +86,14 @@ class Member extends AbstractHelper
         }
 
         $groupsNew = $groups ?
-            \Database::getInstance()
+            Database::getInstance()
                 ->query(
-                    'SELECT n2g_group_id FROM tl_member_group WHERE id IN(' . implode(',', $groups) . ') AND n2g_sync=1'
+                    'SELECT n2g_group_id FROM tl_member_group WHERE id IN('.implode(',', $groups).') AND n2g_sync=1'
                 )
                 ->fetchEach('n2g_group_id')
             : [];
 
-        $groupsOld = \Database::getInstance()
+        $groupsOld = Database::getInstance()
             ->prepare(
                 'SELECT g.n2g_group_id FROM tl_member_to_group AS mtg INNER JOIN tl_member_group g ON g.id=mtg.group_id WHERE mtg.member_id=? AND g.n2g_sync=1'
             )
@@ -95,7 +106,7 @@ class Member extends AbstractHelper
         }
 
         /** @type \Model $member */
-        $member = \MemberModel::findByPk($dc->id);
+        $member = MemberModel::findByPk($dc->id);
 
         # $member           contains obsolete data (pre save)
         # $dc->activeRecord contains current data

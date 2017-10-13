@@ -24,12 +24,12 @@
         "php": "^5.3 || ^7.0",
         "contao/core": "^3.5.0",
         "codefog/contao-haste": "^4.12",
-        "friends-of-contao/contao-associategroups": "~1.3",
-        "richardhj/newsletter2go-api": "^1.0.0"
+        "friends-of-contao/contao-associategroups": "1.3",
+        "richardhj/newsletter2go-api": "^2.0.0"
     },
     "autoload": {
-        "psr-0": {
-            "Newsletter2Go\\": "src/"
+        "psr-4": {
+            "Richardhj\\Newsletter2Go\\Contao": "src/"
         }
     },
     "extra": {

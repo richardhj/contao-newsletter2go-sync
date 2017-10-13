@@ -1,23 +1,32 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Newsletter2Go\ContaoSync;
+namespace Richardhj\Newsletter2Go\Contao;
 
 
-use Newsletter2Go\Api\Model\NewsletterGroup;
-use Newsletter2Go\Api\Model\NewsletterList;
-use Newsletter2Go\Api\Tool\ApiCredentials;
-use Newsletter2Go\Api\Tool\ApiCredentialsFactory;
-use Newsletter2Go\ContaoSync\Model\Newsletter2GoUser;
+use Contao\BackendUser;
+use Richardhj\Newsletter2Go\Api\Model\NewsletterGroup;
+use Richardhj\Newsletter2Go\Api\Model\NewsletterList;
+use Richardhj\Newsletter2Go\Api\Tool\ApiCredentials;
+use Richardhj\Newsletter2Go\Api\Tool\ApiCredentialsFactory;
+use Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser;
 
 
+/**
+ * Class AbstractHelper
+ *
+ * @package Richardhj\Newsletter2Go\Contao
+ */
 abstract class AbstractHelper
 {
 
@@ -43,7 +52,6 @@ abstract class AbstractHelper
         return $return;
     }
 
-
     /**
      * Get the id of the first Newsletter2Go list which might be the default list
      *
@@ -59,14 +67,13 @@ abstract class AbstractHelper
         return $lists[0]->getId();
     }
 
-
     /**
      * @return ApiCredentials|null
      */
     protected static function getApiCredentials()
     {
-        /** @var \BackendUser|\User $backendUser */
-        $backendUser = \BackendUser::getInstance();
+        /** @var BackendUser|\User $backendUser */
+        $backendUser = BackendUser::getInstance();
 
         if (!$backendUser->n2g_active) {
             return null;

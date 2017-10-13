@@ -1,20 +1,29 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Newsletter2Go\ContaoSync;
+namespace Richardhj\Newsletter2Go\Contao;
 
-
+use Contao\System;
 use GuzzleHttp\Exception\ClientException;
-use Newsletter2Go\Api\Model\NewsletterRecipient;
+use NewsletterChannelModel;
+use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
 
 
+/**
+ * Class Hooks
+ *
+ * @package Richardhj\Newsletter2Go\Contao
+ */
 class Hooks extends AbstractHelper
 {
 
@@ -35,14 +44,19 @@ class Hooks extends AbstractHelper
 
         foreach ($channels as $cid) {
             /** @type \Model $channel */
-            $channel = \NewsletterChannelModel::findByPk($cid);
+            $channel = NewsletterChannelModel::findByPk($cid);
 
             if ($channel->n2g_group_id) {
                 try {
                     $receiver->addToGroup($channel->n2g_group_id);
                 } catch (ClientException $e) {
-                    \System::log(
-                        sprintf('Could not activate/insert recipient %s to N2G group %u. %s', $email, $channel->n2g_group_id, $e->getMessage()),
+                    System::log(
+                        sprintf(
+                            'Could not activate/insert recipient %s to N2G group %u. %s',
+                            $email,
+                            $channel->n2g_group_id,
+                            $e->getMessage()
+                        ),
                         __METHOD__,
                         TL_ERROR
                     );
@@ -50,7 +64,6 @@ class Hooks extends AbstractHelper
             }
         }
     }
-
 
     /**
      * Delete receiver from Newsletter2Go
@@ -68,14 +81,19 @@ class Hooks extends AbstractHelper
 
         foreach ($remove as $cid) {
             /** @type \Model $channel */
-            $channel = \NewsletterChannelModel::findByPk($cid);
+            $channel = NewsletterChannelModel::findByPk($cid);
 
             if ($channel->n2g_group_id) {
                 try {
                     $recipient->removeFromGroup($channel->n2g_group_id);
                 } catch (ClientException $e) {
-                    \System::log(
-                        sprintf('Could not delete recipient %s from CR group %u. %s', $email, $channel->cr_group_id, $e->getMessage()),
+                    System::log(
+                        sprintf(
+                            'Could not delete recipient %s from CR group %u. %s',
+                            $email,
+                            $channel->cr_group_id,
+                            $e->getMessage()
+                        ),
                         __METHOD__,
                         TL_ERROR
                     );
@@ -83,7 +101,6 @@ class Hooks extends AbstractHelper
             }
         }
     }
-
 
     public function syncNewsletterRecipientsWithReceivers($dc)
     {

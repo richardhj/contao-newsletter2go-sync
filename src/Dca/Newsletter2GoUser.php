@@ -1,33 +1,45 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Newsletter2Go\ContaoSync\Dca;
+namespace Richardhj\Newsletter2Go\Contao\Dca;
 
-
+use Contao\Controller;
+use Contao\DataContainer;
+use Contao\Environment;
+use Contao\Input;
+use Contao\FrontendTemplate;
 use Haste\Form\Form;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use Newsletter2Go\ContaoSync\AbstractHelper;
-use Newsletter2Go\ContaoSync\Model\Newsletter2GoUser as UserModel;
-use Newsletter2Go\OAuth2\Client\Provider\Newsletter2Go as OAuthProvider;
+use Richardhj\Newsletter2Go\Contao\AbstractHelper;
+use Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser as UserModel;
+use Richardhj\Newsletter2Go\OAuth2\Client\Provider\Newsletter2Go as OAuthProvider;
 
+/**
+ * Class Newsletter2GoUser
+ *
+ * @package Richardhj\Newsletter2Go\Contao\Dca
+ */
 class Newsletter2GoUser extends AbstractHelper
 {
 
     /**
      * Display and process a form that authenticate the api user by fetching a refresh_token for given user credentials
      *
-     * @param \DataContainer $dc
+     * @param DataContainer $dc
      *
      * @return string
      */
-    public function authenticateUser(\DataContainer $dc)
+    public function authenticateUser(DataContainer $dc)
     {
         if (!$dc->id) {
             return '';
@@ -38,8 +50,8 @@ class Newsletter2GoUser extends AbstractHelper
         $refreshToken = $user->authRefreshToken;
         $table        = UserModel::getTable();
 
-        $userAuthTemplate             = new \FrontendTemplate('be_auth_user');
-        $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', \Environment::get('request')));
+        $userAuthTemplate             = new FrontendTemplate('be_auth_user');
+        $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', Environment::get('request')));
         $userAuthTemplate->bacBtTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $userAuthTemplate->backBt     = $GLOBALS['TL_LANG']['MSC']['backBT'];
         $userAuthTemplate->headline   = $GLOBALS['TL_LANG'][$table]['be_user_auth']['headline'];
@@ -62,17 +74,18 @@ class Newsletter2GoUser extends AbstractHelper
 
                 $resourceOwner = $provider->getResourceOwner($accessToken)->toArray();
 
-                $userAuthTemplate->fields = '<p class="tl_confirm m12">' . sprintf(
+                $userAuthTemplate->fields = '<p class="tl_confirm m12">'.sprintf(
                         $GLOBALS['TL_LANG'][$table]['be_user_auth']['authentication_confirmation'],
-                        $resourceOwner['first_name'] . ' ' . $resourceOwner['last_name']
-                    ) . '</p>';
+                        $resourceOwner['first_name'].' '.$resourceOwner['last_name']
+                    ).'</p>';
+
                 return $userAuthTemplate->parse();
 
             } catch (IdentityProviderException $e) {
                 $user->authRefreshToken = null;
                 $user->save();
 
-                \Controller::reload();
+                Controller::reload();
             }
 
             return '';
@@ -81,7 +94,7 @@ class Newsletter2GoUser extends AbstractHelper
         $form = new Form(
             'authenticate_n2g_user', 'POST', function ($haste) {
             /** @noinspection PhpUndefinedMethodInspection */
-            return $haste->getFormId() === \Input::post('FORM_SUBMIT');
+            return $haste->getFormId() === Input::post('FORM_SUBMIT');
         }
         );
 
@@ -91,7 +104,7 @@ class Newsletter2GoUser extends AbstractHelper
                 'label'     => $GLOBALS['TL_LANG']['MSC']['username'],
                 'inputType' => 'text',
                 'eval'      => [
-                    'mandatory' => true
+                    'mandatory' => true,
                 ],
             ]
         );
@@ -103,7 +116,7 @@ class Newsletter2GoUser extends AbstractHelper
                 'inputType' => 'text',
                 'eval'      => [
                     'mandatory' => true,
-                    'hideInput' => true
+                    'hideInput' => true,
                 ],
             ]
         );
@@ -124,7 +137,7 @@ class Newsletter2GoUser extends AbstractHelper
                 $user->authRefreshToken = $accessToken->getRefreshToken();
                 $user->save();
 
-                \Controller::reload();
+                Controller::reload();
             } catch (IdentityProviderException $e) {
                 $form
                     ->getWidget('password')
@@ -135,7 +148,7 @@ class Newsletter2GoUser extends AbstractHelper
         }
 
         $form->addToTemplate($userAuthTemplate);
-        $userAuthTemplate->action = ampersand(\Environment::get('request'), true);
+        $userAuthTemplate->action = ampersand(Environment::get('request'), true);
         $userAuthTemplate->submit = specialchars($GLOBALS['TL_LANG'][$table]['be_user_auth']['submit']);
         $userAuthTemplate->tip    = $GLOBALS['TL_LANG'][$table]['be_user_auth']['tip'];
 
