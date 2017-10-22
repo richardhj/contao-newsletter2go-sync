@@ -1,11 +1,14 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
 
@@ -17,7 +20,7 @@ array_insert(
     4,
     [
         'newsletter2go_users' => [
-            'tables'       => [Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable()],
+            'tables'       => [Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser::getTable()],
             'icon'         => 'system/modules/newsletter/assets/icon.gif',
             'authenticate' => ['Newsletter2Go\ContaoSync\Dca\Newsletter2GoUser', 'authenticateUser'],
         ],
@@ -28,7 +31,7 @@ array_insert(
 /**
  * Models
  */
-$GLOBALS['TL_MODELS'][Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable()] =
+$GLOBALS['TL_MODELS'][Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser::getTable()] =
     'Newsletter2Go\ContaoSync\Model\Newsletter2GoUser';
 
 

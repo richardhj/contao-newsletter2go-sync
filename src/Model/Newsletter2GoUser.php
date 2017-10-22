@@ -1,16 +1,19 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Newsletter2Go\ContaoSync\Model;
+namespace Richardhj\Newsletter2Go\Contao\Model;
 
-
+use Contao\Encryption;
 use Contao\Model;
 
 
@@ -20,7 +23,7 @@ use Contao\Model;
  * @property string $name
  * @property string $authKey          Encrypted account auth key
  * @property string $authRefreshToken Encrypted user refresh token
- * @package Newsletter2Go\ContaoSync\Model
+ * @package Richardhj\Newsletter2Go\Contao\Model
  */
 class Newsletter2GoUser extends Model
 {
@@ -29,7 +32,6 @@ class Newsletter2GoUser extends Model
      * {@inheritdoc}
      */
     static $strTable = 'tl_newsletter2go_user';
-
 
     /**
      * Set a property. Encrypt the auth key beforehand
@@ -43,13 +45,12 @@ class Newsletter2GoUser extends Model
             case 'authKey':
                 /** @noinspection PhpMissingBreakStatementInspection */
             case 'authRefreshToken':
-                $value = \Encryption::encrypt($value);
+                $value = Encryption::encrypt($value);
 
             default:
                 parent::__set($key, $value);
         }
     }
-
 
     /**
      * Encrypt a property. Decrypt the auth key beforhand
@@ -63,7 +64,7 @@ class Newsletter2GoUser extends Model
         switch ($key) {
             case 'authKey':
             case 'authRefreshToken':
-                return \Encryption::decrypt(parent::__get($key));
+                return Encryption::decrypt(parent::__get($key));
                 break;
 
             default:

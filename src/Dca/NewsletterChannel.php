@@ -1,18 +1,27 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Newsletter2Go\ContaoSync\Dca;
+namespace Richardhj\Newsletter2Go\Contao\Dca;
+
+use Contao\DataContainer;
+use Richardhj\Newsletter2Go\Contao\AbstractHelper;
 
 
-use Newsletter2Go\ContaoSync\AbstractHelper;
-
+/**
+ * Class NewsletterChannel
+ *
+ * @package Richardhj\Newsletter2Go\Contao\Dca
+ */
 class NewsletterChannel extends AbstractHelper
 {
     /**
@@ -20,9 +29,9 @@ class NewsletterChannel extends AbstractHelper
      *
      * @category onload_callback
      *
-     * @param \DataContainer $dc
+     * @param DataContainer $dc
      */
-    public function syncNewsletterChannelsWithGroups(\DataContainer $dc)
+    public function syncNewsletterChannelsWithGroups(DataContainer $dc)
     {
 //        // Only synchronize in list view
 //        if ($dc->id) {

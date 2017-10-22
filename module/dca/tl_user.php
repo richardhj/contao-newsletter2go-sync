@@ -1,11 +1,14 @@
 <?php
+
 /**
- * Newsletter2Go Synchronization for Contao Open Source CMS
+ * This file is part of richardhj/contao-newsletter2go-sync.
  *
- * Copyright (c) 2015-2017 Richard Henkenjohann
+ * Copyright (c) 2016-2017 Richard Henkenjohann
  *
- * @package Newsletter2GoSync
- * @author  Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @package   richardhj/contao-newsletter2go-sync
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
 
@@ -47,7 +50,7 @@ $GLOBALS['TL_DCA'][$table]['fields']['n2g_active'] = [
 $GLOBALS['TL_DCA'][$table]['fields']['n2g_user'] = [
     'label'      => &$GLOBALS['TL_LANG'][$table]['n2g_user'],
     'inputType'  => 'select',
-    'foreignKey' => Newsletter2Go\ContaoSync\Model\Newsletter2GoUser::getTable() . '.name',
+    'foreignKey' => Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser::getTable() . '.name',
     'eval'       => [
         'mandatory' => true,
         'tl_class'  => 'w50',
