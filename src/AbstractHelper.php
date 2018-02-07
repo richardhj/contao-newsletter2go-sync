@@ -36,21 +36,21 @@ abstract class AbstractHelper
      * @category options_callback
      *
      * @return array
-     *
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @throws \InvalidArgumentException
      */
     public function getNewsletter2GoGroups()
     {
         $return = [];
-        $groups = NewsletterGroup::findByList(self::getListId(), null, self::getApiCredentials());
+        try {
+            $groups = NewsletterGroup::findByList(self::getListId(), null, self::getApiCredentials());
 
-        if (null !== $groups) {
-            /** @var NewsletterGroup $group */
-            foreach ($groups as $group) {
-                $return[$group->getId()] = $group->getName();
+            if (null !== $groups) {
+                /** @var NewsletterGroup $group */
+                foreach ($groups as $group) {
+                    $return[$group->getId()] = $group->getName();
+                }
             }
+        } catch (\Exception $e) {
+            $return[] = 'Error: '.$e->getMessage().' Did you check the API user authentication?';
         }
 
         return $return;
