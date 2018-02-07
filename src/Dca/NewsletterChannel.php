@@ -11,10 +11,10 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Richardhj\Newsletter2Go\Contao\Dca;
+namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
 use Contao\DataContainer;
-use Richardhj\Newsletter2Go\Contao\AbstractHelper;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
 
 
 /**

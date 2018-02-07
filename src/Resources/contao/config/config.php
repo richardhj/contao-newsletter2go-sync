@@ -11,6 +11,9 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Hooks;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Model\Newsletter2GoUser;
+
 
 /**
  * Back end modules
@@ -20,9 +23,9 @@ array_insert(
     4,
     [
         'newsletter2go_users' => [
-            'tables'       => [Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser::getTable()],
+            'tables'       => ['tl_newsletter2go_user'],
             'icon'         => 'system/modules/newsletter/assets/icon.gif',
-            'authenticate' => ['Newsletter2Go\ContaoSync\Dca\Newsletter2GoUser', 'authenticateUser'],
+            'authenticate' => [Newsletter2GoUser::class, 'authenticateUser'],
         ],
     ]
 );
@@ -31,12 +34,11 @@ array_insert(
 /**
  * Models
  */
-$GLOBALS['TL_MODELS'][Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser::getTable()] =
-    'Newsletter2Go\ContaoSync\Model\Newsletter2GoUser';
+$GLOBALS['TL_MODELS']['tl_newsletter2go_user'] = Newsletter2GoUser::class;
 
 
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['activateRecipient'][] = ['Newsletter2Go\ContaoSync\Hooks', 'activateRecipient'];
-$GLOBALS['TL_HOOKS']['removeRecipient'][]   = ['Newsletter2Go\ContaoSync\Hooks', 'removeRecipient'];
+$GLOBALS['TL_HOOKS']['activateRecipient'][] = [Hooks::class, 'activateRecipient'];
+$GLOBALS['TL_HOOKS']['removeRecipient'][]   = [Hooks::class, 'removeRecipient'];

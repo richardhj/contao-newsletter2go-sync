@@ -11,7 +11,7 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Richardhj\Newsletter2Go\Contao;
+namespace Richardhj\Newsletter2Go\Contao\SyncBundle;
 
 
 use Contao\BackendUser;
@@ -19,7 +19,7 @@ use Richardhj\Newsletter2Go\Api\Model\NewsletterGroup;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterList;
 use Richardhj\Newsletter2Go\Api\Tool\ApiCredentials;
 use Richardhj\Newsletter2Go\Api\Tool\ApiCredentialsFactory;
-use Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Model\Newsletter2GoUser;
 
 
 /**
@@ -36,6 +36,10 @@ abstract class AbstractHelper
      * @category options_callback
      *
      * @return array
+     *
+     * @throws \RuntimeException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function getNewsletter2GoGroups()
     {
@@ -56,6 +60,10 @@ abstract class AbstractHelper
      * Get the id of the first Newsletter2Go list which might be the default list
      *
      * @return string
+     *
+     * @throws \RuntimeException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     protected static function getListId()
     {
@@ -74,17 +82,15 @@ abstract class AbstractHelper
     {
         /** @var BackendUser|\User $backendUser */
         $backendUser = BackendUser::getInstance();
-
         if (!$backendUser->n2g_active) {
             return null;
         }
 
         $user = Newsletter2GoUser::findByPk($backendUser->n2g_user);
-
         if (null === $user) {
             return null;
         }
 
-        return ApiCredentialsFactory::create($user->authKey, $user->authRefreshToken);
+        return ApiCredentialsFactory::createFromRefreshToken($user->authKey, $user->authRefreshToken);
     }
 }

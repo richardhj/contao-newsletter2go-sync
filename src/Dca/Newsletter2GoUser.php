@@ -11,7 +11,7 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Richardhj\Newsletter2Go\Contao\Dca;
+namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
 use Contao\Controller;
 use Contao\DataContainer;
@@ -20,8 +20,8 @@ use Contao\Input;
 use Contao\FrontendTemplate;
 use Haste\Form\Form;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use Richardhj\Newsletter2Go\Contao\AbstractHelper;
-use Richardhj\Newsletter2Go\Contao\Model\Newsletter2GoUser as UserModel;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Model\Newsletter2GoUser as UserModel;
 use Richardhj\Newsletter2Go\OAuth2\Client\Provider\Newsletter2Go as OAuthProvider;
 
 /**
@@ -38,6 +38,9 @@ class Newsletter2GoUser extends AbstractHelper
      * @param DataContainer $dc
      *
      * @return string
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function authenticateUser(DataContainer $dc)
     {
@@ -50,6 +53,7 @@ class Newsletter2GoUser extends AbstractHelper
         $refreshToken = $user->authRefreshToken;
         $table        = UserModel::getTable();
 
+        /** @var FrontendTemplate|\FrontendTemplate $userAuthTemplate */
         $userAuthTemplate             = new FrontendTemplate('be_auth_user');
         $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', Environment::get('request')));
         $userAuthTemplate->bacBtTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);

@@ -11,7 +11,7 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Richardhj\Newsletter2Go\Contao\Model;
+namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Model;
 
 use Contao\Encryption;
 use Contao\Model;
@@ -53,7 +53,7 @@ class Newsletter2GoUser extends Model
     }
 
     /**
-     * Encrypt a property. Decrypt the auth key beforhand
+     * Encrypt a property. Decrypt the auth key beforehand
      *
      * @param string $key
      *

@@ -11,6 +11,8 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Dca\NewsletterChannel;
+
 
 /**
  * Config
@@ -32,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_newsletter_channel']['fields']['n2g_group_id'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_newsletter_channel']['n2g_group_id'],
     'exclude'          => true,
     'inputType'        => 'select',
-    'options_callback' => ['Newsletter2Go\ContaoSync\Dca\NewsletterChannel', 'getNewsletter2GoGroups'],
+    'options_callback' => [NewsletterChannel::class, 'getNewsletter2GoGroups'],
     'eval'             => [
         'unique' => true
     ],

@@ -11,13 +11,13 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Richardhj\Newsletter2Go\Contao\Dca;
+namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
 use Contao\Database;
 use Contao\DataContainer;
 use Contao\MemberModel;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
-use Richardhj\Newsletter2Go\Contao\AbstractHelper;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
 
 
 /**
@@ -34,6 +34,10 @@ class Member extends AbstractHelper
      * @category ondelete_callback (table: tl_member)
      *
      * @param $dc
+     *
+     * @throws \RuntimeException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function deleteMember(DataContainer $dc)
     {
@@ -75,6 +79,10 @@ class Member extends AbstractHelper
      * @param DataContainer $dc
      *
      * @return mixed
+     *
+     * @throws \RuntimeException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     public function syncMemberGroupsWithNewsletter2Go($value, $dc)
     {
@@ -101,7 +109,7 @@ class Member extends AbstractHelper
             ->fetchEach('n2g_group_id');
 
         // Nothing to sync here
-        if (0 === count($groupsNew) && 0 === count($groupsOld)) {
+        if (0 === \count($groupsNew) && 0 === \count($groupsOld)) {
             return $value;
         }
 

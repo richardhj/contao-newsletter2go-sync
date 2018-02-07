@@ -11,7 +11,7 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Richardhj\Newsletter2Go\Contao;
+namespace Richardhj\Newsletter2Go\Contao\SyncBundle;
 
 use Contao\System;
 use GuzzleHttp\Exception\ClientException;

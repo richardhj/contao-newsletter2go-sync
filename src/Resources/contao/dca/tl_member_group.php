@@ -11,15 +11,17 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Dca\MemberGroup;
+
 
 /**
  * Config
  */
 //@todo $GLOBALS['TL_DCA']['tl_member_group']['config']['onload_callback'][] = array('CleverreachSync\Helper\Hooks', 'syncNewsletterChannelsWithGroups');
 $GLOBALS['TL_DCA']['tl_member_group']['config']['onsubmit_callback'][] =
-    ['Newsletter2Go\ContaoSync\Dca\MemberGroup', 'createNewsletter2GoGroup'];
+    [MemberGroup::class, 'createNewsletter2GoGroup'];
 $GLOBALS['TL_DCA']['tl_member_group']['config']['ondelete_callback'][] =
-    ['Newsletter2Go\ContaoSync\Dca\MemberGroup', 'deleteMemberGroup'];
+    [MemberGroup::class, 'deleteMemberGroup'];
 
 
 /**
@@ -53,7 +55,7 @@ $GLOBALS['TL_DCA']['tl_member_group']['fields']['n2g_group_id'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_member_group']['n2g_group_id'],
     'exclude'          => true,
     'inputType'        => 'select',
-    'options_callback' => ['Newsletter2Go\ContaoSync\Dca\MemberGroup', 'getNewsletter2GoGroups'],
+    'options_callback' => [MemberGroup::class, 'getNewsletter2GoGroups'],
     'eval'             => [
         'unique'             => true,
         'includeBlankOption' => true,

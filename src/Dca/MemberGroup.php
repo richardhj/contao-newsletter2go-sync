@@ -11,14 +11,14 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
-namespace Richardhj\Newsletter2Go\Contao\Dca;
+namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
 use Contao\Database;
 use Contao\DataContainer;
 use Contao\MemberGroupModel;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterGroup;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
-use Richardhj\Newsletter2Go\Contao\AbstractHelper;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
 
 
 /**
@@ -35,6 +35,10 @@ class MemberGroup extends AbstractHelper
      * @category onsubmit_callback (table: tl_member_group)
      *
      * @param DataContainer $dc
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \LogicException
      */
     public function createNewsletter2GoGroup(DataContainer $dc)
     {
@@ -68,6 +72,9 @@ class MemberGroup extends AbstractHelper
      * @category ondelete_callback (table: tl_member_group)
      *
      * @param $dc
+     *
+     * @throws \RuntimeException
+     * @throws \LogicException
      */
     public function deleteMemberGroup(DataContainer $dc)
     {
