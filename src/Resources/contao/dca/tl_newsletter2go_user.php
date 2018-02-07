@@ -71,7 +71,7 @@ $GLOBALS['TL_DCA']['tl_newsletter2go_user'] = [
             'authenticate' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_newsletter2go_user']['authenticate'],
                 'href'  => 'key=authenticate',
-                'icon'  => 'bundles/richardhjcontaonewsletter2gosyncbundle/be-user-auth.png',
+                'icon'  => 'bundles/richardhjcontaonewsletter2gosync/be-user-auth.png',
             ],
         ],
     ],

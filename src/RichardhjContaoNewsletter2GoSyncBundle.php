@@ -14,7 +14,9 @@
 namespace Richardhj\Newsletter2Go\Contao\SyncBundle;
 
 
-class RichardhjContaoNewsletter2GoSyncBundle
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+class RichardhjContaoNewsletter2GoSyncBundle extends Bundle
 {
 
 }
