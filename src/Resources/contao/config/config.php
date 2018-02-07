@@ -11,8 +11,9 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Dca\Newsletter2GoUser as Newsletter2GoUserDca;
 use Richardhj\Newsletter2Go\Contao\SyncBundle\Hooks;
-use Richardhj\Newsletter2Go\Contao\SyncBundle\Model\Newsletter2GoUser;
+use Richardhj\Newsletter2Go\Contao\SyncBundle\Model\Newsletter2GoUser as Newsletter2GoUserModel;
 
 
 /**
@@ -25,7 +26,7 @@ array_insert(
         'newsletter2go_users' => [
             'tables'       => ['tl_newsletter2go_user'],
             'icon'         => 'system/modules/newsletter/assets/icon.gif',
-            'authenticate' => [Newsletter2GoUser::class, 'authenticateUser'],
+            'authenticate' => [Newsletter2GoUserDca::class, 'authenticateUser'],
         ],
     ]
 );
@@ -34,7 +35,7 @@ array_insert(
 /**
  * Models
  */
-$GLOBALS['TL_MODELS']['tl_newsletter2go_user'] = Newsletter2GoUser::class;
+$GLOBALS['TL_MODELS']['tl_newsletter2go_user'] = Newsletter2GoUserModel::class;
 
 
 /**

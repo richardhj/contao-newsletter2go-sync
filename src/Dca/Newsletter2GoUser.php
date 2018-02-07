@@ -17,7 +17,7 @@ use Contao\Controller;
 use Contao\DataContainer;
 use Contao\Environment;
 use Contao\Input;
-use Contao\FrontendTemplate;
+use FrontendTemplate;
 use Haste\Form\Form;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
@@ -53,7 +53,6 @@ class Newsletter2GoUser extends AbstractHelper
         $refreshToken = $user->authRefreshToken;
         $table        = UserModel::getTable();
 
-        /** @var FrontendTemplate|\FrontendTemplate $userAuthTemplate */
         $userAuthTemplate             = new FrontendTemplate('be_auth_user');
         $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', Environment::get('request')));
         $userAuthTemplate->bacBtTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
