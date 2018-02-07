@@ -59,7 +59,7 @@ $GLOBALS['TL_DCA']['tl_member_group']['fields']['n2g_group_id'] = [
     'eval'             => [
         'unique'             => true,
         'includeBlankOption' => true,
-        'blankOptionLabel'   => '(neu erstellen)', //@todo lang
+        'blankOptionLabel'   => &$GLOBALS['TL_LANG']['tl_member_group']['n2g_group_create_new'],
         'tl_class'           => 'w50',
     ],
     'sql'              => "varchar(8) NOT NULL default ''",
