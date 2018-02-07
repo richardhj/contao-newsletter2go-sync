@@ -46,6 +46,6 @@ $GLOBALS['TL_LANG']['tl_newsletter2go_user']['authenticate'][1] = 'Authenticate 
  * Authentication back end
  */
 $GLOBALS['TL_LANG']['tl_newsletter2go_user']['be_user_auth']['headline']                    = 'Authenticate API user';
-$GLOBALS['TL_LANG']['tl_newsletter2go_user']['be_user_auth']['authentication_confirmation'] = 'You are logged in as: %s';
+$GLOBALS['TL_LANG']['tl_newsletter2go_user']['be_user_auth']['authentication_confirmation'] = 'You are logged in as: %s (%s)';
 $GLOBALS['TL_LANG']['tl_newsletter2go_user']['be_user_auth']['submit']                      = 'Authenticate';
 $GLOBALS['TL_LANG']['tl_newsletter2go_user']['be_user_auth']['tip']                         = 'Your credentials (username/password) will not be saved.';

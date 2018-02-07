@@ -79,7 +79,8 @@ class Newsletter2GoUser extends AbstractHelper
 
                 $userAuthTemplate->fields = '<p class="tl_confirm m12">'.sprintf(
                         $GLOBALS['TL_LANG'][$table]['be_user_auth']['authentication_confirmation'],
-                        $resourceOwner['first_name'].' '.$resourceOwner['last_name']
+                        $resourceOwner['first_name'].' '.$resourceOwner['last_name'],
+                        $resourceOwner['email']
                     ).'</p>';
 
                 return $userAuthTemplate->parse();
