@@ -31,7 +31,7 @@ class Newsletter2GoUser extends Model
     /**
      * {@inheritdoc}
      */
-    static $strTable = 'tl_newsletter2go_user';
+    protected static $strTable = 'tl_newsletter2go_user';
 
     /**
      * Set a property. Encrypt the auth key beforehand
