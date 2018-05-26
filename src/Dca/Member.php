@@ -13,9 +13,11 @@
 
 namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
-use Contao\Database;
 use Contao\DataContainer;
 use Contao\MemberModel;
+use Contao\System;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
 use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
 
@@ -29,6 +31,19 @@ class Member extends AbstractHelper
 {
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * Member constructor.
+     */
+    public function __construct()
+    {
+        $this->connection = System::getContainer()->get('database_connection');
+    }
+
+    /**
      * Remove a member from all groups after deleting
      *
      * @category ondelete_callback (table: tl_member)
@@ -39,7 +54,7 @@ class Member extends AbstractHelper
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
-    public function deleteMember(DataContainer $dc)
+    public function deleteMember(DataContainer $dc): void
     {
         if (!$dc->id) {
             return;
@@ -58,14 +73,16 @@ class Member extends AbstractHelper
         // Fetch id
         $recipient->save();
 
-        $groups = Database::getInstance()
-            ->prepare(
-                'SELECT mg.n2g_group_id FROM tl_member_group AS mg INNER JOIN tl_member_to_group mtg ON mg.id=mtg.group_id WHERE mtg.member_id=? AND mg.n2g_sync=1'
-            )
-            ->execute($dc->id)
-            ->fetchEach('n2g_group_id');
+        $statement = $this->connection->createQueryBuilder()
+            ->select('mg.n2g_group_id')
+            ->from('tl_member_group', 'mg')
+            ->innerJoin('mg', 'tl_member_to_group', 'mtg', 'mg.id=mtg.group_id')
+            ->where('mtg.member_id=:member_id')
+            ->andWhere('mg.n2g_sync=1')
+            ->setParameter('member_id', $dc->id)
+            ->execute();
 
-        foreach ($groups as $group) {
+        foreach ($statement->fetchAll(FetchMode::COLUMN, 0) as $group) {
             $recipient->removeFromGroup($group);
         }
     }
@@ -94,19 +111,25 @@ class Member extends AbstractHelper
         }
 
         $groupsNew = $groups ?
-            Database::getInstance()
-                ->query(
-                    'SELECT n2g_group_id FROM tl_member_group WHERE id IN('.implode(',', $groups).') AND n2g_sync=1'
-                )
-                ->fetchEach('n2g_group_id')
+            $this->connection->createQueryBuilder()
+                ->select('n2g_group_id')
+                ->from('tl_member_group')
+                ->where('id IN (:groups)')
+                ->andWhere('n2g_sync=1')
+                ->setParameter('groups', $groups, Connection::PARAM_STR_ARRAY)
+                ->execute()
+                ->fetchAll(FetchMode::COLUMN, 0)
             : [];
 
-        $groupsOld = Database::getInstance()
-            ->prepare(
-                'SELECT g.n2g_group_id FROM tl_member_to_group AS mtg INNER JOIN tl_member_group g ON g.id=mtg.group_id WHERE mtg.member_id=? AND g.n2g_sync=1'
-            )
-            ->execute($dc->id)
-            ->fetchEach('n2g_group_id');
+        $groupsOld = $this->connection->createQueryBuilder()
+            ->select('g.n2g_group_id')
+            ->from('tl_member_to_group', 'mtg')
+            ->innerJoin('mtg', 'tl_member_group', 'g', 'g.id=mtg.group_id')
+            ->where('mtg.member_id=:member')
+            ->andWhere('n2g_sync=1')
+            ->setParameter('member', $dc->id)
+            ->execute()
+            ->fetchAll(FetchMode::COLUMN, 0);
 
         // Nothing to sync here
         if (0 === \count($groupsNew) && 0 === \count($groupsOld)) {
@@ -115,6 +138,9 @@ class Member extends AbstractHelper
 
         /** @type \Model $member */
         $member = MemberModel::findByPk($dc->id);
+        if (null === $member) {
+            return $value;
+        }
 
         # $member           contains obsolete data (pre save)
         # $dc->activeRecord contains current data

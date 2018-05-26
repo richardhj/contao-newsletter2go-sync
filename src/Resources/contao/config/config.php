@@ -25,7 +25,6 @@ array_insert(
     [
         'newsletter2go_users' => [
             'tables'       => ['tl_newsletter2go_user'],
-            'icon'         => 'system/modules/newsletter/assets/icon.gif',
             'authenticate' => [Newsletter2GoUserDca::class, 'authenticateUser'],
         ],
     ]

@@ -31,11 +31,15 @@ class Plugin implements BundlePluginInterface
      *
      * @return ConfigInterface[]
      */
-    public function getBundles(ParserInterface $parser)
+    public function getBundles(ParserInterface $parser): array
     {
         return [
             BundleConfig::create(RichardhjContaoNewsletter2GoSyncBundle::class)
-                ->setLoadAfter([ContaoCoreBundle::class])
+                ->setLoadAfter(
+                    [
+                        ContaoCoreBundle::class,
+                    ]
+                )
                 ->setReplace(['newsletter2go-sync']),
         ];
     }

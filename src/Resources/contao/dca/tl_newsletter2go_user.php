@@ -11,6 +11,11 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
+use ParagonIE\Halite\Alerts\CannotPerformOperation;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Symmetric\Crypto as SymmetricCrypto;
+
 
 /**
  * DCA config
@@ -102,27 +107,71 @@ $GLOBALS['TL_DCA']['tl_newsletter2go_user'] = [
             'sql'       => "varchar(255) NOT NULL default ''",
         ],
         'authKey'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_newsletter2go_user']['authKey'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'         => &$GLOBALS['TL_LANG']['tl_newsletter2go_user']['authKey'],
+            'exclude'       => true,
+            'inputType'     => 'text',
+            'eval'          => [
                 'mandatory'    => true,
-                'encrypt'      => true,
                 'preserveTags' => true,
                 'tl_class'     => 'w50',
             ],
-            'sql'       => 'text NULL',
+            'load_callback' => [
+                function ($value) {
+                    return empty($value) ? '' : '*****';
+                },
+            ],
+            'save_callback' => [
+                function (string $value, \DataContainer $dc) {
+                    $keyPath = System::getContainer()->getParameter('kernel.project_dir').'/var/contao-newsletter2go-sync.secret.key';
+                    try {
+                        $key = KeyFactory::loadEncryptionKey($keyPath);
+                    } catch (CannotPerformOperation $e) {
+                        $key = KeyFactory::generateEncryptionKey();
+                        KeyFactory::save($key, $keyPath);
+                    }
+
+                    return '*****' === $value
+                        ? $dc->activeRecord->password
+                        : SymmetricCrypto::encrypt(
+                            new HiddenString($value),
+                            $key
+                        );
+                },
+            ],
+            'sql'           => 'text NULL',
         ],
         'authRefreshToken' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_newsletter2go_user']['authRefreshToken'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'         => &$GLOBALS['TL_LANG']['tl_newsletter2go_user']['authRefreshToken'],
+            'exclude'       => true,
+            'inputType'     => 'text',
+            'eval'          => [
                 'mandatory' => true,
-                'encrypt'   => true,
                 'hideInput' => true,
             ],
-            'sql'       => 'text NULL',
+            'load_callback' => [
+                function ($value) {
+                    return empty($value) ? '' : '*****';
+                },
+            ],
+            'save_callback' => [
+                function (string $value, \DataContainer $dc) {
+                    $keyPath = System::getContainer()->getParameter('kernel.project_dir').'/var/contao-newsletter2go-sync.secret.key';
+                    try {
+                        $key = KeyFactory::loadEncryptionKey($keyPath);
+                    } catch (CannotPerformOperation $e) {
+                        $key = KeyFactory::generateEncryptionKey();
+                        KeyFactory::save($key, $keyPath);
+                    }
+
+                    return '*****' === $value
+                        ? $dc->activeRecord->password
+                        : SymmetricCrypto::encrypt(
+                            new HiddenString($value),
+                            $key
+                        );
+                },
+            ],
+            'sql'           => 'text NULL',
         ],
     ],
 ];

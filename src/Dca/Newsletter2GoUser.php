@@ -42,7 +42,7 @@ class Newsletter2GoUser extends AbstractHelper
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    public function authenticateUser(DataContainer $dc)
+    public function authenticateUser(DataContainer $dc): string
     {
         if (!$dc->id) {
             return '';
@@ -97,7 +97,6 @@ class Newsletter2GoUser extends AbstractHelper
 
         $form = new Form(
             'authenticate_n2g_user', 'POST', function ($haste) {
-            /** @noinspection PhpUndefinedMethodInspection */
             return $haste->getFormId() === Input::post('FORM_SUBMIT');
         }
         );

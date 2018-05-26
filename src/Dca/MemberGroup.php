@@ -13,9 +13,11 @@
 
 namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
-use Contao\Database;
 use Contao\DataContainer;
 use Contao\MemberGroupModel;
+use Contao\System;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterGroup;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
 use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
@@ -30,6 +32,19 @@ class MemberGroup extends AbstractHelper
 {
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * Member constructor.
+     */
+    public function __construct()
+    {
+        $this->connection = System::getContainer()->get('database_connection');
+    }
+
+    /**
      * Create a group on Newsletter2Go if sync for member group was enabled but no existing group was selected
      *
      * @category onsubmit_callback (table: tl_member_group)
@@ -40,7 +55,7 @@ class MemberGroup extends AbstractHelper
      * @throws \RuntimeException
      * @throws \LogicException
      */
-    public function createNewsletter2GoGroup(DataContainer $dc)
+    public function createNewsletter2GoGroup(DataContainer $dc): void
     {
         if (!$dc->id) {
             return;
@@ -76,7 +91,7 @@ class MemberGroup extends AbstractHelper
      * @throws \RuntimeException
      * @throws \LogicException
      */
-    public function deleteMemberGroup(DataContainer $dc)
+    public function deleteMemberGroup(DataContainer $dc): void
     {
         if (!$dc->id || !$dc->activeRecord->n2g_sync || !$dc->activeRecord->n2g_group_id) {
             return;
@@ -87,12 +102,14 @@ class MemberGroup extends AbstractHelper
             return;
         }
 
-        $members = Database::getInstance()
-            ->prepare(
-                'SELECT m.email FROM tl_member AS m INNER JOIN tl_member_to_group mg ON m.id=mg.member_id WHERE mg.group_id=?'
-            )
-            ->execute($dc->id)
-            ->fetchEach('email');
+        $members = $this->connection->createQueryBuilder()
+            ->select('m.email')
+            ->from('tl_member', 'm')
+            ->innerJoin('m', 'tl_member_to_group', 'mg', 'm.id=mg.member_id')
+            ->where('mg.group_id=:group')
+            ->setParameter('group', $dc->id)
+            ->execute()
+            ->fetchAll(FetchMode::COLUMN, 0);
 
         foreach ($members as $member) {
             $recipient = new NewsletterRecipient();

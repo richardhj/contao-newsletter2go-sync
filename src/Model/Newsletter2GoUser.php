@@ -13,8 +13,14 @@
 
 namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Model;
 
-use Contao\Encryption;
 use Contao\Model;
+use Contao\System;
+use ParagonIE\Halite\Alerts\CannotPerformOperation;
+use ParagonIE\Halite\Alerts\InvalidKey;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Symmetric\Crypto as SymmetricCrypto;
+use ParagonIE\Halite\Symmetric\EncryptionKey;
 
 
 /**
@@ -38,6 +44,12 @@ class Newsletter2GoUser extends Model
      *
      * @param string $key
      * @param mixed  $value
+     *
+     * @throws CannotPerformOperation
+     * @throws InvalidKey
+     * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
+     * @throws \ParagonIE\Halite\Alerts\InvalidMessage
+     * @throws \ParagonIE\Halite\Alerts\InvalidType
      */
     public function __set($key, $value)
     {
@@ -45,7 +57,7 @@ class Newsletter2GoUser extends Model
             case 'authKey':
                 /** @noinspection PhpMissingBreakStatementInspection */
             case 'authRefreshToken':
-                $value = Encryption::encrypt($value);
+                $value = SymmetricCrypto::encrypt(new HiddenString($value), $this->getEncryptionKey());
 
             default:
                 parent::__set($key, $value);
@@ -58,17 +70,41 @@ class Newsletter2GoUser extends Model
      * @param string $key
      *
      * @return mixed
+     * @throws CannotPerformOperation
+     * @throws InvalidKey
+     * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
+     * @throws \ParagonIE\Halite\Alerts\InvalidMessage
+     * @throws \ParagonIE\Halite\Alerts\InvalidSignature
+     * @throws \ParagonIE\Halite\Alerts\InvalidType
      */
     public function __get($key)
     {
         switch ($key) {
             case 'authKey':
             case 'authRefreshToken':
-                return Encryption::decrypt(parent::__get($key));
+                return SymmetricCrypto::decrypt(parent::__get($key), $this->getEncryptionKey())->getString();
                 break;
 
             default:
                 return parent::__get($key);
         }
+    }
+
+    /**
+     * @throws InvalidKey
+     * @throws CannotPerformOperation
+     */
+    private function getEncryptionKey(): EncryptionKey
+    {
+        $keyPath =
+            System::getContainer()->getParameter('kernel.project_dir').'/var/contao-newsletter2go-sync.secret.key';
+        try {
+            $key = KeyFactory::loadEncryptionKey($keyPath);
+        } catch (CannotPerformOperation $e) {
+            $key = KeyFactory::generateEncryptionKey();
+            KeyFactory::save($key, $keyPath);
+        }
+
+        return $key;
     }
 }

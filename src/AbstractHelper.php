@@ -37,7 +37,7 @@ abstract class AbstractHelper
      *
      * @return array
      */
-    public function getNewsletter2GoGroups()
+    public function getNewsletter2GoGroups(): array
     {
         $return = [];
         try {
@@ -65,7 +65,7 @@ abstract class AbstractHelper
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
-    protected static function getListId()
+    protected static function getListId(): string
     {
         /** @var NewsletterList[] $lists */
         $lists = NewsletterList::findAll(null, self::getApiCredentials());
@@ -78,7 +78,7 @@ abstract class AbstractHelper
     /**
      * @return ApiCredentials|null
      */
-    protected static function getApiCredentials()
+    protected static function getApiCredentials(): ?ApiCredentials
     {
         /** @var BackendUser|\User $backendUser */
         $backendUser = BackendUser::getInstance();
