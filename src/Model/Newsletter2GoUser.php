@@ -82,7 +82,10 @@ class Newsletter2GoUser extends Model
         switch ($key) {
             case 'authKey':
             case 'authRefreshToken':
-                return SymmetricCrypto::decrypt(parent::__get($key), $this->getEncryptionKey())->getString();
+                return !empty(parent::__get($key)) ? SymmetricCrypto::decrypt(
+                    parent::__get($key),
+                    $this->getEncryptionKey()
+                )->getString() : '';
                 break;
 
             default:
