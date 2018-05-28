@@ -103,19 +103,23 @@ class MemberGroup extends AbstractHelper
         }
 
         $members = $this->connection->createQueryBuilder()
-            ->select('m.email')
+            ->select('m.email AS email', 'm.n2g_receiver_id AS n2g_receiver_id')
             ->from('tl_member', 'm')
             ->innerJoin('m', 'tl_member_to_group', 'mg', 'm.id=mg.member_id')
             ->where('mg.group_id=:group')
             ->setParameter('group', $dc->id)
             ->execute()
-            ->fetchAll(FetchMode::COLUMN, 0);
+            ->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($members as $member) {
             $recipient = new NewsletterRecipient();
             $recipient->setApiCredentials($apiCredentials);
             $recipient->setListId(self::getListId());
-            $recipient->setEmail($member);
+            if ($member['n2g_receiver_id']) {
+                $recipient->setId($member['n2g_receiver_id']);
+            } else {
+                $recipient->setEmail($member['email']);
+            }
             // Saving a recipient will fetch the id
             $recipient->save();
 

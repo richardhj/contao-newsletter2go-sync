@@ -13,12 +13,15 @@
 
 namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
+use Contao\Config;
 use Contao\DataContainer;
 use Contao\MemberModel;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
+use Richardhj\Newsletter2Go\Api\Model\NewsletterAttribute;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
+use Richardhj\Newsletter2Go\Api\Tool\GetParameters;
 use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
 
 
@@ -68,7 +71,11 @@ class Member extends AbstractHelper
         $recipient = new NewsletterRecipient();
         $recipient->setApiCredentials($apiCredentials);
         $recipient->setListId(self::getListId());
-        $recipient->setEmail($dc->activeRecord->email);
+        if ($dc->activeRecord->n2g_receiver_id) {
+            $recipient->setId($dc->activeRecord->n2g_receiver_id);
+        } else {
+            $recipient->setEmail($dc->activeRecord->email);
+        }
 
         // Fetch id
         $recipient->save();
@@ -150,9 +157,16 @@ class Member extends AbstractHelper
         $recipient->setListId(self::getListId());
         $recipient->setId($member->n2g_receiver_id);
 
-        // Todo refactor to event
-        foreach ($member->row() as $k => $v) {
-            switch ($k) {
+        $fields = Config::get('n2g_sync_fields');
+        $fields = deserialize($fields, true);
+        if (empty($fields)) {
+            $fields = ['email'];
+        }
+
+        foreach ($fields as $field) {
+            $v = $member->$field;
+
+            switch ($field) {
                 case 'email':
                     $recipient->setEmail($v);
                     break;
@@ -181,8 +195,15 @@ class Member extends AbstractHelper
                     break;
 
                 default:
+                    $this->ensureCustomAttributeForFieldExists($field);
+                    $recipient->$field = $v;
                     break;
             }
+
+        }
+
+        if ($member->n2g_receiver_id) {
+            $recipient->setId($member->n2g_receiver_id);
         }
 
         // Saving a recipient will update the data and fetch the id
@@ -205,5 +226,69 @@ class Member extends AbstractHelper
         }
 
         return $value;
+    }
+
+    private function ensureCustomAttributeForFieldExists(string $field)
+    {
+        // Find current attribute
+        $getParameters = new GetParameters();
+        $getParameters->setFilter(sprintf('name=="%s"', $field));
+        $attribute = NewsletterAttribute::findByList(self::getListId(), $getParameters, self::getApiCredentials());
+
+        // If not found, create new one
+        if (null === $attribute) {
+            [$type, $subtype] = $this->determineAttributeType($GLOBALS['TL_DCA']['tl_member']['fields'][$field]);
+
+            $attribute = new NewsletterAttribute();
+            $attribute->setName($field);
+            $attribute->setListIds([self::getListId()]);
+            $attribute->setType($type);
+            $attribute->setSubType($subtype);
+            $attribute->save();
+        }
+    }
+
+    private function determineAttributeType(array $config): array
+    {
+        $type    = '';
+        $subtype = '';
+
+        switch ($config['inputType']) {
+            case 'chkecbox':
+                $type = 'boolean';
+                break;
+
+            case 'text':
+                $type = 'text';
+                if (isset($config['eval']['rgxp'])) {
+                    switch ($config['eval']['rgxp']) {
+                        case 'email':
+                            $subtype = 'email';
+                            break;
+
+                        case 'natural':
+                            $type    = 'number';
+                            $subtype = 'integer';
+                            break;
+
+                        case 'digit':
+                            $type    = 'number';
+                            $subtype = 'float';
+                            break;
+
+                        case 'url':
+                            $subtype = 'url';
+                            break;
+
+                        case 'phone':
+                            $subtype = 'tel';
+                            break;
+                    }
+                }
+
+                break;
+        }
+
+        return [$type, $subtype];
     }
 }

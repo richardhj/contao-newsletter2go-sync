@@ -15,6 +15,7 @@ namespace Richardhj\Newsletter2Go\Contao\SyncBundle;
 
 
 use Contao\BackendUser;
+use Contao\Config;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterGroup;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterList;
 use Richardhj\Newsletter2Go\Api\Tool\ApiCredentials;
@@ -82,13 +83,13 @@ abstract class AbstractHelper
     {
         /** @var BackendUser|\User $backendUser */
         $backendUser = BackendUser::getInstance();
-        if (!$backendUser->n2g_active) {
-            return null;
-        }
-
-        $user = Newsletter2GoUser::findByPk($backendUser->n2g_user);
-        if (null === $user) {
-            return null;
+        if ($backendUser->n2g_active) {
+            $user = Newsletter2GoUser::findByPk($backendUser->n2g_user);
+            if (null === $user) {
+                return null;
+            }
+        } else {
+            $user = Newsletter2GoUser::findByPk(Config::get('n2g_default_user'));
         }
 
         return ApiCredentialsFactory::createFromRefreshToken($user->authKey, $user->authRefreshToken);
