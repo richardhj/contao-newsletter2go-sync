@@ -228,7 +228,7 @@ class Member extends AbstractHelper
         return $value;
     }
 
-    private function ensureCustomAttributeForFieldExists(string $field)
+    private function ensureCustomAttributeForFieldExists(string $field): void
     {
         // Find current attribute
         $getParameters = new GetParameters();
@@ -248,8 +248,12 @@ class Member extends AbstractHelper
         }
     }
 
-    private function determineAttributeType(array $config): array
+    private function determineAttributeType(?array $config): array
     {
+        if (null === $config) {
+            return ['text', 'text'];
+        }
+
         $type    = '';
         $subtype = '';
 
