@@ -53,9 +53,7 @@ class Member extends AbstractHelper
      *
      * @param $dc
      *
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @throws \InvalidArgumentException
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     public function deleteMember(DataContainer $dc): void
     {
@@ -104,9 +102,7 @@ class Member extends AbstractHelper
      *
      * @return mixed
      *
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @throws \InvalidArgumentException
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     public function syncMemberGroupsWithNewsletter2Go($value, $dc)
     {
@@ -155,7 +151,6 @@ class Member extends AbstractHelper
         $recipient = new NewsletterRecipient();
         $recipient->setApiCredentials($apiCredentials);
         $recipient->setListId(self::getListId());
-        $recipient->setId($member->n2g_receiver_id);
 
         $fields = Config::get('n2g_sync_fields');
         $fields = deserialize($fields, true);

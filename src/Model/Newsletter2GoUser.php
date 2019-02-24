@@ -13,14 +13,13 @@
 
 namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Model;
 
-use Contao\Model;
-use Contao\System;
+use Contao\{Model, System};
 use ParagonIE\Halite\Alerts\CannotPerformOperation;
 use ParagonIE\Halite\Alerts\InvalidKey;
-use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto as SymmetricCrypto;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
+use ParagonIE\HiddenString\HiddenString;
 
 
 /**
@@ -100,7 +99,7 @@ class Newsletter2GoUser extends Model
     private function getEncryptionKey(): EncryptionKey
     {
         $keyPath =
-            System::getContainer()->getParameter('kernel.project_dir').'/var/contao-newsletter2go-sync.secret.key';
+            System::getContainer()->getParameter('kernel.project_dir') . '/var/contao-newsletter2go-sync.secret.key';
         try {
             $key = KeyFactory::loadEncryptionKey($keyPath);
         } catch (CannotPerformOperation $e) {

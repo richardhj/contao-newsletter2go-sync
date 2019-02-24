@@ -17,7 +17,6 @@ use Richardhj\Newsletter2Go\Contao\SyncBundle\Dca\MemberGroup;
 /**
  * Config
  */
-//@todo $GLOBALS['TL_DCA']['tl_member_group']['config']['onload_callback'][] = array('CleverreachSync\Helper\Hooks', 'syncNewsletterChannelsWithGroups');
 $GLOBALS['TL_DCA']['tl_member_group']['config']['onsubmit_callback'][] =
     [MemberGroup::class, 'createNewsletter2GoGroup'];
 $GLOBALS['TL_DCA']['tl_member_group']['config']['ondelete_callback'][] =
@@ -28,7 +27,8 @@ $GLOBALS['TL_DCA']['tl_member_group']['config']['ondelete_callback'][] =
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_member_group']['palettes']['__selector__'][] = 'n2g_sync';
-$GLOBALS['TL_DCA']['tl_member_group']['palettes']['default']        .= ';{newsletter2go_legend},n2g_sync';
+
+$GLOBALS['TL_DCA']['tl_member_group']['palettes']['default'] .= ';{newsletter2go_legend},n2g_sync';
 
 
 /**

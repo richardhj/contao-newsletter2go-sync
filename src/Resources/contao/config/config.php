@@ -35,10 +35,3 @@ array_insert(
  * Models
  */
 $GLOBALS['TL_MODELS']['tl_newsletter2go_user'] = Newsletter2GoUserModel::class;
-
-
-/**
- * Hooks
- */
-$GLOBALS['TL_HOOKS']['activateRecipient'][] = [Hooks::class, 'activateRecipient'];
-$GLOBALS['TL_HOOKS']['removeRecipient'][]   = [Hooks::class, 'removeRecipient'];

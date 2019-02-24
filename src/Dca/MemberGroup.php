@@ -17,7 +17,6 @@ use Contao\DataContainer;
 use Contao\MemberGroupModel;
 use Contao\System;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterGroup;
 use Richardhj\Newsletter2Go\Api\Model\NewsletterRecipient;
 use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
@@ -88,8 +87,7 @@ class MemberGroup extends AbstractHelper
      *
      * @param $dc
      *
-     * @throws \RuntimeException
-     * @throws \LogicException
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
      */
     public function deleteMemberGroup(DataContainer $dc): void
     {

@@ -13,11 +13,7 @@
 
 namespace Richardhj\Newsletter2Go\Contao\SyncBundle\Dca;
 
-use Contao\Controller;
-use Contao\DataContainer;
-use Contao\Environment;
-use Contao\Input;
-use FrontendTemplate;
+use Contao\{Controller, DataContainer, Environment, FrontendTemplate, Input};
 use Haste\Form\Form;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Richardhj\Newsletter2Go\Contao\SyncBundle\AbstractHelper;
@@ -53,7 +49,8 @@ class Newsletter2GoUser extends AbstractHelper
         $refreshToken = $user->authRefreshToken;
         $table        = UserModel::getTable();
 
-        $userAuthTemplate             = new FrontendTemplate('be_auth_user');
+        $userAuthTemplate = new FrontendTemplate('be_auth_user');
+
         $userAuthTemplate->backBtHref = ampersand(str_replace('&key=authenticate', '', Environment::get('request')));
         $userAuthTemplate->bacBtTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $userAuthTemplate->backBt     = $GLOBALS['TL_LANG']['MSC']['backBT'];
@@ -77,11 +74,11 @@ class Newsletter2GoUser extends AbstractHelper
 
                 $resourceOwner = $provider->getResourceOwner($accessToken)->toArray();
 
-                $userAuthTemplate->fields = '<p class="tl_confirm m12">'.sprintf(
+                $userAuthTemplate->fields = '<p class="tl_confirm m12">' . sprintf(
                         $GLOBALS['TL_LANG'][$table]['be_user_auth']['authentication_confirmation'],
-                        $resourceOwner['first_name'].' '.$resourceOwner['last_name'],
+                        $resourceOwner['first_name'] . ' ' . $resourceOwner['last_name'],
                         $resourceOwner['email']
-                    ).'</p>';
+                    ) . '</p>';
 
                 return $userAuthTemplate->parse();
 
@@ -126,7 +123,6 @@ class Newsletter2GoUser extends AbstractHelper
 
         // validate() also checks whether the form has been submitted
         if ($form->validate()) {
-
             try {
                 // Login and fetch new access token
                 $accessToken = $provider->getAccessToken(

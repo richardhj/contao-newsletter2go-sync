@@ -11,10 +11,11 @@
  * @license   https://github.com/richardhj/richardhj/contao-newsletter2go-sync/blob/master/LICENSE LGPL-3.0
  */
 
+use Contao\System;
 use ParagonIE\Halite\Alerts\CannotPerformOperation;
-use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto as SymmetricCrypto;
+use ParagonIE\HiddenString\HiddenString;
 
 
 /**
@@ -65,8 +66,8 @@ $GLOBALS['TL_DCA']['tl_newsletter2go_user'] = [
                 'label'      => &$GLOBALS['TL_LANG']['tl_newsletter2go_user']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
-                                .'\'))return false;Backend.getScrollOffset()"',
+                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                                . '\'))return false;Backend.getScrollOffset()"',
             ],
             'show'         => [
                 'label' => &$GLOBALS['TL_LANG']['tl_newsletter2go_user']['show'],
@@ -122,7 +123,8 @@ $GLOBALS['TL_DCA']['tl_newsletter2go_user'] = [
             ],
             'save_callback' => [
                 function (string $value, \DataContainer $dc) {
-                    $keyPath = System::getContainer()->getParameter('kernel.project_dir').'/var/contao-newsletter2go-sync.secret.key';
+                    $keyPath = System::getContainer()->getParameter('kernel.project_dir')
+                               . '/var/contao-newsletter2go-sync.secret.key';
                     try {
                         $key = KeyFactory::loadEncryptionKey($keyPath);
                     } catch (CannotPerformOperation $e) {
@@ -131,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_newsletter2go_user'] = [
                     }
 
                     return '*****' === $value
-                        ? $dc->activeRecord->password
+                        ? $dc->activeRecord->authKey
                         : SymmetricCrypto::encrypt(
                             new HiddenString($value),
                             $key
@@ -155,7 +157,8 @@ $GLOBALS['TL_DCA']['tl_newsletter2go_user'] = [
             ],
             'save_callback' => [
                 function (string $value, \DataContainer $dc) {
-                    $keyPath = System::getContainer()->getParameter('kernel.project_dir').'/var/contao-newsletter2go-sync.secret.key';
+                    $keyPath = System::getContainer()->getParameter('kernel.project_dir')
+                               . '/var/contao-newsletter2go-sync.secret.key';
                     try {
                         $key = KeyFactory::loadEncryptionKey($keyPath);
                     } catch (CannotPerformOperation $e) {
@@ -164,7 +167,7 @@ $GLOBALS['TL_DCA']['tl_newsletter2go_user'] = [
                     }
 
                     return '*****' === $value
-                        ? $dc->activeRecord->password
+                        ? $dc->activeRecord->authRefreshToken
                         : SymmetricCrypto::encrypt(
                             new HiddenString($value),
                             $key
