@@ -235,8 +235,10 @@ class Member extends AbstractHelper
             [$type, $subtype] = $this->determineAttributeType($GLOBALS['TL_DCA']['tl_member']['fields'][$field]);
 
             $attribute = new NewsletterAttribute();
-            $attribute->setName($field);
+            $attribute->setApiCredentials(self::getApiCredentials());
             $attribute->setListIds([self::getListId()]);
+
+            $attribute->setName($field);
             $attribute->setType($type);
             $attribute->setSubType($subtype);
             $attribute->save();
@@ -245,12 +247,12 @@ class Member extends AbstractHelper
 
     private function determineAttributeType(?array $config): array
     {
-        if (null === $config) {
-            return ['text', 'text'];
-        }
+        $type    = 'text';
+        $subtype = 'text';
 
-        $type    = '';
-        $subtype = '';
+        if (null === $config) {
+            return [$type, $subtype];
+        }
 
         switch ($config['inputType']) {
             case 'chkecbox':
@@ -258,7 +260,6 @@ class Member extends AbstractHelper
                 break;
 
             case 'text':
-                $type = 'text';
                 if (isset($config['eval']['rgxp'])) {
                     switch ($config['eval']['rgxp']) {
                         case 'email':
