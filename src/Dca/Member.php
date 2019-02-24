@@ -161,6 +161,11 @@ class Member extends AbstractHelper
         foreach ($fields as $field) {
             $v = $member->$field;
 
+            // The id name is reserved.
+            if ('id' === $field) {
+                $field = 'contao_member_id';
+            }
+
             switch ($field) {
                 case 'email':
                     $recipient->setEmail($v);
