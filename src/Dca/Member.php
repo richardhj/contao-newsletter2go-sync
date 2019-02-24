@@ -260,7 +260,7 @@ class Member extends AbstractHelper
         }
 
         switch ($config['inputType']) {
-            case 'chkecbox':
+            case 'checkbox':
                 $type = 'boolean';
                 break;
 
